@@ -1,11 +1,9 @@
 import React from 'react';
-import './App.css';
+import PostView from './pages/PostView'
 
 const App = () => {
   return (
-    <div>
-      asd
-    </div>
+    <PostView />
   );
 }
 
