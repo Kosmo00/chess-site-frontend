@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 // react-bootstrap components
 import Card from 'react-bootstrap/Card'
@@ -7,9 +7,11 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 // chess-site components
-import Commentary from './components/Commentary'
+//import Commentary from './components/Commentary'
+import CommentariesSection from './components/CommentariesSection'
 
 const Main = ({ post, commentaries }) => {
+
   return (
     <Container id='publication' fluid>
       <Row className='justify-content-center'>
@@ -29,17 +31,7 @@ const Main = ({ post, commentaries }) => {
           </Card>
         </Col>
       </Row>
-      <section className='mt-5' id='comentaries'>
-        <Row className='justify-content-center'>
-          <Col xs='10' md='12'>
-            <h4>Commentaries</h4>
-          </Col>
-        </Row>
-
-        {commentaries.map(commentary => (
-          <Commentary key={commentary.id} {...commentary} />
-        ))}
-      </section>
+      <CommentariesSection commentaries={commentaries} />
     </Container>
   )
 }
