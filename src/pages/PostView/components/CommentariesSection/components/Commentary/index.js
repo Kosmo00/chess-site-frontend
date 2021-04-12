@@ -10,7 +10,7 @@ const Commentary = ({ body }) => {
 
   return (
     <Row className='mt-3 justify-content-center'>
-      <Col xs='10' md='12'>
+      <Col xs='10' lg='12'>
         <Card>
           <Media className="m-2">
             <img
