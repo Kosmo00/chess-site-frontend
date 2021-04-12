@@ -15,7 +15,6 @@ const PostView = () => {
   useEffect(() => {
     axios.get(getPostEndpoint())
       .then(res => {
-        console.log(res.data)
         setPost(res.data)
         setCommentaries(res.data.comentaries)
       })
