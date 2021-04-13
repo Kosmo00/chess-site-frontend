@@ -1,5 +1,5 @@
-export const getPostEndpoint = () => {
-    return 'http://localhost:4000/api/posts/Kosmo/Mediojuego_tipico'
+export const getPostEndpoint = (username, post_title) => {
+    return `http://localhost:4000/api/posts/${username}/${post_title}`
 }
 
 export const getAllPostsEndpoint = () => {

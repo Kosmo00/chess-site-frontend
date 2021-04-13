@@ -17,7 +17,7 @@ const Main = ({ post, commentaries }) => {
       <Row>
         <Col lg={9} xl={{ span: 8, offset: 1 }} className='mt-5'>
           <PostSection post={post} />
-          <CommentariesSection commentaries={commentaries} />`
+          <CommentariesSection commentaries={commentaries} />
         </Col>
         <Col lg={3} className='mt-5'>
           <SiteAside />

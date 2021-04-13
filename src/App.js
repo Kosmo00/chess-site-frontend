@@ -14,7 +14,7 @@ const App = () => {
       <SiteNavbar />
       <BrowserRouter>
         <Switch>
-          <Route exact path='/post' component={PostView} />
+          <Route exact path='/post/:username/:post_title' component={PostView} />
           <Route exact path='/' component={RedirectToPost} />
           <Route component={NotFound} />
         </Switch>
@@ -24,7 +24,7 @@ const App = () => {
 }
 
 const RedirectToPost = props => {
-  props.history.push('/post')
+  props.history.push('/posts')
   return <></>
 }
 

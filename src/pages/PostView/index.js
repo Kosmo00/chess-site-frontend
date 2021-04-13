@@ -6,14 +6,15 @@ import Main from './Main'
 
 import { getPostEndpoint } from '../../endpoints'
 
-const PostView = () => {
+const PostView = ({ match }) => {
 
   const [post, setPost] = useState({})
 
   const [commentaries, setCommentaries] = useState([])
 
   useEffect(() => {
-    axios.get(getPostEndpoint())
+    const { username, post_title } = match.params
+    axios.get(getPostEndpoint(username, post_title))
       .then(res => {
         setPost(res.data)
         setCommentaries(res.data.comentaries)
@@ -21,7 +22,7 @@ const PostView = () => {
       .catch(err => {
         console.log(err)
       })
-  }, [])
+  }, [match])
 
   return (
     <Main
