@@ -24,7 +24,7 @@ const App = () => {
 }
 
 const RedirectToPost = props => {
-  props.history.push('/posts')
+  props.history.push('/post/Kosmo/Mediojuego_tipico')
   return <></>
 }
 
