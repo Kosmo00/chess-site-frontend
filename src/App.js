@@ -6,7 +6,7 @@ import PostView from './pages/PostView'
 import NotFound from './pages/NotFound'
 
 // chess-site components
-import SiteNavbar from './pages/components/SiteNavbar'
+import SiteNavbar from './pages/_components/SiteNavbar'
 
 const App = () => {
   return (

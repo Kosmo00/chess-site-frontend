@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 
-import {getAllPostsEndpoint} from '../../endpoints'
+import {getAllPostsEndpoint} from '../endpoints'
 
 const AllPostView = () => {
 
