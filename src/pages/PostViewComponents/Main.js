@@ -6,9 +6,9 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 // chess-site components
-import PostSection from './components/PostSection'
-import CommentariesSection from './components/CommentariesSection'
-import SiteAside from '../components/SiteAside'
+import PostSection from './PostSection'
+import CommentariesSection from './CommentariesSection'
+import SiteAside from '../_components/SiteAside'
 
 const Main = ({ post, commentaries }) => {
 

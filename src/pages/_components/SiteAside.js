@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 // chess-site components
-import SiteAds from './components/SiteAds'
+import SiteAds from './SiteAsideComponents/SiteAds'
 
 const SiteAside = () => {
   return (

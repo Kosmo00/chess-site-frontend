@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 // chess-site components
-import Main from './Main'
+import Main from './PostViewComponents/Main.js'
 
-import { getPostEndpoint } from '../../endpoints'
+import { getPostEndpoint } from '../endpoints'
 
 const PostView = ({ match }) => {
 
@@ -22,7 +22,7 @@ const PostView = ({ match }) => {
       .catch(err => {
         console.log(err)
       })
-  }, [match])
+  }, [match.params])
 
   return (
     <Main

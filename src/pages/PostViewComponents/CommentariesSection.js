@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 // chess-site components
-import Commentary from './components/Commentary'
+import Commentary from './CommentariesSectionComponents/Commentary'
 
 const CommentariesSection = ({ commentaries }) => {
   return (
