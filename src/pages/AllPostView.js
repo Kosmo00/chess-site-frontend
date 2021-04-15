@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import {getAllPostsEndpoint} from '../endpoints'
+import { getAllPostsEndpoint } from '../endpoints'
+
+// chess-site components
+import Main from './AllPostsViewComponents/Main'
 
 const AllPostView = () => {
 
@@ -9,18 +12,16 @@ const AllPostView = () => {
 
   useEffect(() => {
     axios.get(getAllPostsEndpoint())
-    .then(res => {
-      setPosts(res.data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  })
+      .then(res => {
+        setPosts(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
 
   return (
-    <div>
-      
-    </div>
+    <Main posts={posts} />
   )
 }
 
