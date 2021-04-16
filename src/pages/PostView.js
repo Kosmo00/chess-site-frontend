@@ -17,7 +17,7 @@ const PostView = ({ match }) => {
     axios.get(getPostEndpoint(username, post_title))
       .then(res => {
         setPost(res.data)
-        setCommentaries(res.data.comentaries)
+        setCommentaries(res.data.Commentaries)
       })
       .catch(err => {
         console.log(err)
