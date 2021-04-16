@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Media from 'react-bootstrap/Media';
 
-const Commentary = ({ body, user }) => {
+const Commentary = ({ body, User }) => {
 
   return (
     <Row className='mt-3 justify-content-center'>
@@ -21,7 +21,7 @@ const Commentary = ({ body, user }) => {
               alt="User Profile"
             />
             <Media.Body>
-              <h5>{user.nick}</h5>
+              <h5>{User.nick}</h5>
               <p>{body}</p>
             </Media.Body>
           </Media>
