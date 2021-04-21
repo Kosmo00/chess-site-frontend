@@ -12,8 +12,8 @@ const Main = ({ posts }) => {
   return (
     <WithAside id='all_posts'>
       {posts.map(post => (
-        <Link key={post.id} to={`/post/${post.User.nick}/${post.title}`} className='btn'>
-          <Card className='mb-3'>
+        <Link key={post.id} to={`/post/${post.User.nick}/${post.title}`} className='btn mb-3'>
+          <Card>
             <Card.Body>
               <Media>
                 <Media.Body className='text-left'>
@@ -24,7 +24,6 @@ const Main = ({ posts }) => {
             </Card.Body>
           </Card>
         </Link>
-
       ))}
     </WithAside>
   )

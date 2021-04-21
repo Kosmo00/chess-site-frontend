@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
 // react-bootstrap components
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 
+// chess-site providers
+import { LoginContext } from '../../App'
+
 const SiteNavbar = props => {
+
+  const userContext = useContext(LoginContext)
+
+  const { userState } = userContext
+
   return (
     <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" fixed='top'>
-      <Navbar.Brand>Chess Site</Navbar.Brand>
+      <Link to='/'><Navbar.Brand>Chess Site</Navbar.Brand></Link>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
@@ -23,10 +32,9 @@ const SiteNavbar = props => {
           </NavDropdown>
         </Nav>
         <Nav>
-          <Nav.Link href="#deets">More deets</Nav.Link>
-          <Nav.Link eventKey={2} href="#memes">
-            Dank memes
-      </Nav.Link>
+          {!userState.token && <Link to='/login' className='text-decoration-none'><Nav.Link as='span'>Login</Nav.Link></Link>}
+          {!userState.token && <Link to='/register' className='text-decoration-none'><Nav.Link as='span'>Register</Nav.Link></Link>}
+          {userState.token && <Link to='/logout' className='text-decoration-none'><Nav.Link as='span'>Logout</Nav.Link></Link>}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

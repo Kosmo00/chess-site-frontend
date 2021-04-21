@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col'
 import Media from 'react-bootstrap/Media';
 
 const Commentary = ({ body, User }) => {
-
   return (
     <Row className='mt-3 justify-content-center'>
       <Col xs='10' lg='12'>
@@ -16,9 +15,9 @@ const Commentary = ({ body, User }) => {
             <img
               width={64}
               height={64}
-              className="mr-4"
-              src="props.profile"
-              alt="User Profile"
+              className='mr-4'
+              src='props.profile'
+              alt='User Profile'
             />
             <Media.Body>
               <h5>{User.nick}</h5>
