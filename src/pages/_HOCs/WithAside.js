@@ -11,7 +11,7 @@ import SiteAside from '../_components/SiteAside'
 const WithAside = ({ children, id }) => {
 
   return (
-    <Container fluid id={id}>
+    <Container fluid id={id} className='mt-5'>
       <Row>
         <Col lg={9} xl={{ span: 8, offset: 1 }} className='mt-5'>
           {children}

@@ -15,3 +15,7 @@ export const postLogin = () => {
 export const postRegister = () => {
     return `${prefix}/api/register`
 }
+
+export const logout = () => {
+    return `${prefix}/api/logout`
+}
