@@ -6,12 +6,12 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Media from 'react-bootstrap/Media';
 
-const Commentary = ({ body, User }) => {
+const Commentary = ({ body, User, children, margin_left }) => {
   return (
-    <Row className='mt-3 justify-content-center'>
-      <Col xs='10' lg='12'>
+    <Row className='my-3 justify-content-center'>
+      <Col xs={margin_left ? '10' : '12'} lg='12' className={`ml-n${margin_left}`}>
         <Card>
-          <Media className="m-2">
+          <Media className='m-2'>
             <img
               width={64}
               height={64}
@@ -22,6 +22,7 @@ const Commentary = ({ body, User }) => {
             <Media.Body>
               <h5>{User.nick}</h5>
               <p>{body}</p>
+              {children}
             </Media.Body>
           </Media>
         </Card>

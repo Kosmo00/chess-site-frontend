@@ -1,5 +1,6 @@
 import React, { useReducer, useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import axios from 'axios'
 
 // chess-site pages
 import PostView from './pages/PostView'
@@ -10,6 +11,8 @@ import RegisterView from './pages/RegisterView'
 
 // chess-site components
 import SiteNavbar from './pages/_components/SiteNavbar'
+
+import { logout } from './endpoints'
 
 export const LoginContext = React.createContext()
 
@@ -59,8 +62,24 @@ const Logout = () => {
   const { userState, userDispatch } = userContext
 
   useEffect(() => {
-    userDispatch({ type: 'logout' })
-  }, [userDispatch])
+    if (userState.token) {
+      axios.post(logout(), userState, {
+        headers: {
+          'x-token': userState.token
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          userDispatch({ type: 'logout' })
+        })
+    }
+
+  }, [userDispatch, userState])
 
   return (
     <>
