@@ -9,7 +9,7 @@ const WithCenterContainer = ({ children }) => {
   return (
     <div>
       <Container fluid className='vh-100 d-flex align-items-center'>
-        <Row className='vw-100 justify-content-center'>
+        <Row className='vw-100 justify-content-center d-flex align-items-center'>
           {children}
         </Row>
       </Container>
