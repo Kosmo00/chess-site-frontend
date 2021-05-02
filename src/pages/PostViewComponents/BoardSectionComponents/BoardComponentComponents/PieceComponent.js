@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 
-const PieceComponent = ({ square_piece, width }) => {
+const PieceComponent = ({ square_piece, width, posX, posY }) => {
 
   const [cursor, setCursor] = useState('grab')
+  const [opacity, setOpacity] = useState(1)
 
   const renderPiece = () => {
     const DIR = '/assets/chess-pieces/'
@@ -24,14 +25,22 @@ const PieceComponent = ({ square_piece, width }) => {
   }
 
   return (
-    <img src={renderPiece()}
+    <img
+      className='piece'
+      src={renderPiece()}
       alt={square_piece}
       width={width}
       height={width}
-      style={{ cursor: cursor }}
-      onMouseDown={() => setCursor('grabbing')}
-      onMouseUp={() => setCursor('grab')}
-      onMouseLeave={() => setCursor('grab')}
+      style={{ cursor: cursor, opacity: opacity }}
+      onDrag={() => {
+        setCursor('none')
+        setOpacity(0)
+      }}
+      onDragEnd={() => {
+        setCursor('grab')
+        setOpacity(1)
+      }}
+      draggable={true}
     />
   )
 }
