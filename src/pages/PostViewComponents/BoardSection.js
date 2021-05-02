@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React from 'react'
 import useResizeAware from 'react-resize-aware'
 
 // react-bootstrap components

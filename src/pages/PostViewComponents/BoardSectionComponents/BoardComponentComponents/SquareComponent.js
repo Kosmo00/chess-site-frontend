@@ -13,7 +13,11 @@ const SquareComponent = ({ color, posX, posY, width }) => {
 
   return (
     <div
-      className='d-flex align-items-center justify-content-center'
+      onDrop={ev => {
+        ev.preventDefault()
+        boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
+      }}
+      onDragOver={ev => ev.preventDefault()}
       onMouseDown={() => boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })}
       style={{
         backgroundColor: color,
@@ -22,7 +26,7 @@ const SquareComponent = ({ color, posX, posY, width }) => {
       }}>
       {
         boardState.pieces_colocation[posX][posY] !== ''
-        && <PieceComponent square_piece={boardState.pieces_colocation[posX][posY]} width={width} />
+        && <PieceComponent square_piece={boardState.pieces_colocation[posX][posY]} width={width} posX={posX} posY={posY} />
       }
     </div>
   )
