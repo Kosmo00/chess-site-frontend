@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import useResizeAware from 'react-resize-aware'
 
 // react-bootstrap components
@@ -9,17 +9,25 @@ import Col from 'react-bootstrap/Col'
 import BoardComponent from './BoardSectionComponents/BoardComponent'
 import NotationComponent from './BoardSectionComponents/NotationComponent'
 
+// chess-site reducers
+import useBoardSectionReducer from './BoardSectionHooks/BoardSectionReducer'
+
+export const BoardContext = React.createContext()
+
 const BoardSection = () => {
   const [resizeListener, sizes] = useResizeAware()
+  const { boardState, boardDispatch } = useBoardSectionReducer()
   return (
     <Row>
-      <Col xs={7}>
-        {resizeListener}
-        <BoardComponent width={sizes.width} />
-      </Col>
-      <Col xs={5}>
-        <NotationComponent height={sizes.width - 32 - sizes.width % 8} />
-      </Col>
+      <BoardContext.Provider value={{ boardState: boardState, boardDispatch: boardDispatch }}>
+        <Col xs={7}>
+          {resizeListener}
+          <BoardComponent width={sizes.width} />
+        </Col>
+        <Col xs={5}>
+          <NotationComponent height={sizes.width - 32 - sizes.width % 8} />
+        </Col>
+      </BoardContext.Provider>
     </Row>
   )
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="svg1" inkscape:version="0.40" sodipodi:docbase="/home/vector" sodipodi:docname="chess_set_symbols.svg" sodipodi:version="0.32" xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 96 104"
+	 style="enable-background:new 0 0 96 104;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+</style>
+<rect x="62.1" y="19" class="st0" width="11.9" height="13.9"/>
+<rect x="38.8" y="19" class="st0" width="16.2" height="13.9"/>
+<rect x="21.3" y="19.9" class="st0" width="11.4" height="13"/>
+<rect x="25.1" y="25.3" class="st0" width="44.9" height="10.7"/>
+<rect x="18.5" y="79" class="st0" width="58" height="7"/>
+<rect x="23.7" y="70.3" class="st0" width="47.5" height="7.1"/>
+<rect x="29.6" y="38.7" class="st0" width="35.2" height="38.8"/>
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="layer1" inkscape:cx="420.94487" inkscape:cy="151.37844" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="994" inkscape:window-width="1270" inkscape:window-x="0" inkscape:window-y="5" inkscape:zoom="1.3674339" pagecolor="#ffffff">
+	</sodipodi:namedview>
+<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	<path id="path1705" d="M32.7,40.4v22.9h29.4V40.4H32.7 M17.5,90.5L15,88v-8.9l13.2-13.3V40l-11.4-9.9V18.3l3.7-3.6h11.6l2.2,2.2
+		v3.4H38v-3.4l2.2-2.2h14.2l2.2,2.2v3.4h3.6v-3.4l2.3-2.2h11.6l3.7,3.6V30L66.7,40v25.8l13.2,13.3V88l-2.5,2.5H17.5 M19.6,80.3v5
+		h55.8v-5H19.6 M32.2,67.5l-8.5,8.3h47.5l-8.5-8.3H32.2 M42.5,20.1v3.4l-1.9,1.8h-8.4l-1.9-1.8v-3.6H23l-1.7,1.8v7.2l8.8,7.1h34.6
+		l8.8-7.1v-7.2l-1.7-1.8h-7.2v3.6l-1.9,1.8h-8.4l-1.9-1.8v-3.4L42.5,20.1"/>
+</g>
+</svg>
