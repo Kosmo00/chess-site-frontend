@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-const PieceComponent = ({ square_piece, width, posX, posY }) => {
+const PieceComponent = ({ square_piece, width }) => {
 
-  const [cursor, setCursor] = useState('grab')
   const [opacity, setOpacity] = useState(1)
 
   const renderPiece = () => {
@@ -31,13 +30,11 @@ const PieceComponent = ({ square_piece, width, posX, posY }) => {
       alt={square_piece}
       width={width}
       height={width}
-      style={{ cursor: cursor, opacity: opacity }}
-      onDrag={() => {
-        setCursor('none')
+      style={{ cursor: 'grab', opacity: opacity }}
+      onDrag={(ev) => {
         setOpacity(0)
       }}
       onDragEnd={() => {
-        setCursor('grab')
         setOpacity(1)
       }}
       draggable={true}
