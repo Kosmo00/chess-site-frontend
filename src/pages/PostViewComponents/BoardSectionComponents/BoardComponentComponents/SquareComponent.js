@@ -11,22 +11,29 @@ const SquareComponent = ({ color, posX, posY, width }) => {
   const boardContext = useContext(BoardContext)
   const { boardState, boardDispatch } = boardContext
 
+  const { pieces_colocation, legal_moves } = boardState
+
+  const movePieceEvent = () => {
+    boardDispatch({ type: 'event', value: 'mouse up' })
+    boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
+  }
+
   return (
     <div
       onDrop={ev => {
         ev.preventDefault()
-        boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
+        movePieceEvent()
       }}
       onDragOver={ev => ev.preventDefault()}
-      onMouseDown={() => boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })}
+      onMouseDown={() => movePieceEvent()}
       style={{
-        backgroundColor: color,
+        backgroundColor: legal_moves[posX][posY] ? 'skyblue' : color,
         width: width,
         height: width
       }}>
       {
-        boardState.pieces_colocation[posX][posY] !== ''
-        && <PieceComponent square_piece={boardState.pieces_colocation[posX][posY]} width={width} posX={posX} posY={posY} />
+        pieces_colocation[posX][posY] !== ''
+        && <PieceComponent square_piece={pieces_colocation[posX][posY]} width={width} posX={posX} posY={posY} />
       }
     </div>
   )
