@@ -34,7 +34,7 @@ const boardReducer = (state, action) => {
     case 'press square':
       return { ...state, ...selectAPiece(state, action.value.posX, action.value.posY) }
     case 'event':
-      return {...state, event: action.value}
+      return { ...state, event: action.value }
     default:
       return
   }
@@ -59,12 +59,19 @@ const selectAPiece = (state, posX, posY) => {
   else if (state.selected_piece !== null) {
     if ((/[A-Z]/.test(state.pieces_colocation[posX][posY]) && state.turn === 1 && state.event !== 'mouse up') ||
       (/[a-z]/.test(state.pieces_colocation[posX][posY]) && state.turn === -1 && state.event !== 'mouse up')) {
-      state.legal_moves = restartLegalMoves(state.legal_moves)
-      state.selected_piece[0] = posX
-      state.selected_piece[1] = posY
-      state.legal_moves = prepareLegalMoves(state)
+      if (state.selected_piece[0] === posX && state.selected_piece[1] === posY){
+        state.selected_piece = null
+        state.legal_moves = restartLegalMoves(state.legal_moves)
+      }
+      else{
+        state.legal_moves = restartLegalMoves(state.legal_moves)
+        state.selected_piece[0] = posX
+        state.selected_piece[1] = posY
+        state.legal_moves = prepareLegalMoves(state)
+      }
+      
     }
-    else {
+    else if (state.event) {
       if (state.legal_moves[posX][posY]) {
         state.pieces_colocation[posX][posY] = state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]]
         state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
