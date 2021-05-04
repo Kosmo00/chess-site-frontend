@@ -1,3 +1,5 @@
+import { prepareLegalMoves } from './BoardSectionReducer'
+
 const legal_movements = {
   standart_chess: {
     pawnMoves: (state) => {
@@ -132,6 +134,56 @@ const legal_movements = {
         }
       }
       return legal_moves
+    },
+    comprobateCheck: (state) => {
+      const { selected_piece, pieces_colocation } = state
+      const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+
+      let legal_moves = getAllColorLegalMoves(state)
+
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
+          if (legal_moves[i][j] && /[k, K]/.test(pieces_colocation[i][j]) && color_square_piece !== color_piece) {
+            return [i, j]
+          }
+        }
+      }
+      return null
+    },
+    validateLegalMovements: (state) => {
+      let { selected_piece, pieces_colocation, legal_moves } = state
+
+      const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+      let king_position = null
+
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
+          if (/[k, K]/.test(pieces_colocation[i][j]) && color_square_piece === color_piece) {
+            king_position = [i, j]
+          }
+        }
+      }
+
+      let simulated_legal_movements = null
+
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (legal_moves[i][j]) {
+            const last_position = pieces_colocation[i][j]
+            pieces_colocation[i][j] = pieces_colocation[selected_piece[0]][selected_piece[1]]
+            pieces_colocation[selected_piece[0]][selected_piece[1]] = ''
+            simulated_legal_movements = getAllColorLegalMoves(state)
+            if (simulated_legal_movements[king_position[0]][king_position[1]]) {
+              legal_moves[i][j] = false
+            }
+            pieces_colocation[selected_piece[0]][selected_piece[1]] = pieces_colocation[i][j]
+            pieces_colocation[i][j] = last_position
+          }
+        }
+      }
+      return legal_moves
     }
   }
 }
@@ -152,6 +204,34 @@ const isSquareEmpty = (piece, board, plusXAxis, plusYAxis) => {
 const isInBoard = (piece, plusXAxis, plusYAxis) => {
   return piece[0] + plusXAxis < 8 && piece[0] + plusXAxis >= 0 &&
     piece[1] + plusYAxis < 8 && piece[1] + plusYAxis >= 0
+}
+
+const buildArrayOfLegalMoves = () => {
+  let legal_moves = []
+
+  for (let i = 0; i < 8; i++) {
+    legal_moves[i] = []
+    for (let j = 0; j < 8; j++) {
+      legal_moves[i][j] = false
+    }
+  }
+
+  return legal_moves
+}
+
+const getAllColorLegalMoves = (state) => {
+  const { selected_piece, pieces_colocation } = state
+  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+  let legal_moves = buildArrayOfLegalMoves()
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
+      if (color_square_piece !== color_piece && color_square_piece !== undefined) {
+        legal_moves = prepareLegalMoves({ ...state, legal_moves, selected_piece: [i, j] })
+      }
+    }
+  }
+  return legal_moves
 }
 
 export default legal_movements
