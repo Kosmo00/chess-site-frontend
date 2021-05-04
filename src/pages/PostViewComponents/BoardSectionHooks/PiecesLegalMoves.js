@@ -156,15 +156,20 @@ const legal_movements = {
 
       const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
       let king_position = null
-
-      for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-          const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
-          if (/[k, K]/.test(pieces_colocation[i][j]) && color_square_piece === color_piece) {
-            king_position = [i, j]
+      if (/[k, K]/.test(pieces_colocation[selected_piece[0][selected_piece[1]]])) {
+        king_position = selected_piece
+      }
+      else {
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
+            if (/[k, K]/.test(pieces_colocation[i][j]) && color_square_piece === color_piece) {
+              king_position = [i, j]
+            }
           }
         }
       }
+
 
       let simulated_legal_movements = null
 
@@ -174,12 +179,20 @@ const legal_movements = {
             const last_position = pieces_colocation[i][j]
             pieces_colocation[i][j] = pieces_colocation[selected_piece[0]][selected_piece[1]]
             pieces_colocation[selected_piece[0]][selected_piece[1]] = ''
-            simulated_legal_movements = getAllColorLegalMoves(state)
+            if (king_position[0] === selected_piece[0] && king_position[1] === selected_piece[1]) {
+              king_position = [i, j]
+            }
+            simulated_legal_movements = getAllColorLegalMoves({ ...state, selected_piece: [i, j] })
+
             if (simulated_legal_movements[king_position[0]][king_position[1]]) {
               legal_moves[i][j] = false
             }
             pieces_colocation[selected_piece[0]][selected_piece[1]] = pieces_colocation[i][j]
             pieces_colocation[i][j] = last_position
+
+            if (king_position[0] === i && king_position[1] === j) {
+              king_position = [selected_piece[0], selected_piece[1]]
+            }
           }
         }
       }
