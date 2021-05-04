@@ -25,6 +25,7 @@ const boardInitialState = {
   ],
   notation: '',
   selected_piece: null,
+  check_square: null,
   turn: 1,
   event: ''
 }
@@ -54,28 +55,31 @@ const selectAPiece = (state, posX, posY) => {
       state.selected_piece[0] = posX
       state.selected_piece[1] = posY
       state.legal_moves = prepareLegalMoves(state)
+      state.legal_moves = legal_movements.standart_chess.validateLegalMovements(state)
     }
   }
   else if (state.selected_piece !== null) {
     if ((/[A-Z]/.test(state.pieces_colocation[posX][posY]) && state.turn === 1 && state.event !== 'mouse up') ||
       (/[a-z]/.test(state.pieces_colocation[posX][posY]) && state.turn === -1 && state.event !== 'mouse up')) {
-      if (state.selected_piece[0] === posX && state.selected_piece[1] === posY){
+      if (state.selected_piece[0] === posX && state.selected_piece[1] === posY) {
         state.selected_piece = null
         state.legal_moves = restartLegalMoves(state.legal_moves)
       }
-      else{
+      else {
         state.legal_moves = restartLegalMoves(state.legal_moves)
         state.selected_piece[0] = posX
         state.selected_piece[1] = posY
         state.legal_moves = prepareLegalMoves(state)
+        state.legal_moves = legal_movements.standart_chess.validateLegalMovements(state)
       }
-      
+
     }
     else if (state.event) {
       if (state.legal_moves[posX][posY]) {
         state.pieces_colocation[posX][posY] = state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]]
         state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
         state.turn *= -1
+        state.check_square = legal_movements.standart_chess.comprobateCheck(state)
       }
       state.selected_piece = null
       state.legal_moves = restartLegalMoves(state.legal_moves)
@@ -85,7 +89,7 @@ const selectAPiece = (state, posX, posY) => {
   return state
 }
 
-const prepareLegalMoves = (state) => {
+export const prepareLegalMoves = (state) => {
   let { selected_piece, pieces_colocation, legal_moves } = state
   const { standart_chess } = legal_movements
   const { pawnMoves, knigthMoves, bishopMoves, rookMoves, queenMoves, kingMoves } = standart_chess
