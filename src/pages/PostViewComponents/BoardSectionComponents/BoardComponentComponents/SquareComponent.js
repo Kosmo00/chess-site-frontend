@@ -25,7 +25,7 @@ const SquareComponent = ({ color, posX, posY, width }) => {
   const [background, setBackground] = useState(color)
 
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (allow_move && atacked_piece !== '') {
       setBackground(`radial-gradient(${color} 50%, #4CC054 100%`)
     }
@@ -41,7 +41,7 @@ const SquareComponent = ({ color, posX, posY, width }) => {
     else {
       setBackground(color)
     }
-  }, [color, atacked_piece, allow_move, posSPieceX, posSPieceY, posX, posY, pos_c_piece_x, pos_c_piece_y])*/
+  }, [color, atacked_piece, allow_move, posSPieceX, posSPieceY, posX, posY, pos_c_piece_x, pos_c_piece_y])
 
   const handleDrop = (ev) => {
     ev.preventDefault()
