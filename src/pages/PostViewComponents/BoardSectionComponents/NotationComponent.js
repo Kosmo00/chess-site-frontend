@@ -16,4 +16,4 @@ const NotationComponent = ({ height }) => {
   )
 }
 
-export default NotationComponent
+export default React.memo(NotationComponent)

@@ -31,7 +31,7 @@ const PieceComponent = ({ square_piece, width }) => {
       width={width}
       height={width}
       style={{ cursor: 'grab', opacity: opacity }}
-      onDrag={(ev) => {
+      onDrag={() => {
         setOpacity(0)
       }}
       onDragEnd={() => {
@@ -42,4 +42,4 @@ const PieceComponent = ({ square_piece, width }) => {
   )
 }
 
-export default PieceComponent
+export default React.memo(PieceComponent)

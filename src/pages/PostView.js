@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
 
 // chess-site components
@@ -7,6 +8,10 @@ import SiteLoader from './_components/SiteLoader'
 import SiteError from './_components/SiteError'
 
 import { getPostEndpoint } from '../endpoints'
+
+const propTypes = {
+  match: PropTypes.object.isRequired
+}
 
 const PostView = ({ match }) => {
 
@@ -41,5 +46,7 @@ const PostView = ({ match }) => {
     </>
   )
 }
+
+PostView.propTypes = propTypes
 
 export default PostView

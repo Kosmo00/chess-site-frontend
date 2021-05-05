@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 // chess-site components
 import PostSection from './PostSection'
@@ -19,6 +20,11 @@ const Main = ({ post, commentaries }) => {
       {!boardView && <CommentariesSection commentaries={commentaries} />}
     </WithAside>
   )
+}
+
+Main.propTypes = {
+  post: PropTypes.object.isRequired,
+  commentaries: PropTypes.array
 }
 
 export default Main

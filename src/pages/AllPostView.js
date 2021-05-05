@@ -29,9 +29,9 @@ const AllPostView = () => {
 
   return (
     <>
-    {loading && <SiteLoader/>}
-    {!loading && error && <SiteError/>}
-    {!loading && !error && <Main posts={posts} />}
+      {loading && <SiteLoader />}
+      {!loading && error && <SiteError />}
+      {!loading && !error && <Main posts={posts} />}
     </>
   )
 }

@@ -1,9 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // react-bootstrap components
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+
+const propTypes = {
+  post: PropTypes.object.isRequired
+}
 
 const PostSection = ({ post }) => {
   return (
@@ -28,5 +33,7 @@ const PostSection = ({ post }) => {
     </section>
   )
 }
+
+PostSection.propTypes = propTypes
 
 export default PostSection
