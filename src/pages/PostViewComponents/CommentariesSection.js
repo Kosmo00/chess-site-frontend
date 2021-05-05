@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 // react-bootstrap components
 import Row from 'react-bootstrap/Row'
@@ -6,6 +7,10 @@ import Col from 'react-bootstrap/Col'
 
 // chess-site components
 import Commentary from './CommentariesSectionComponents/Commentary'
+
+const propTypes = {
+  commentaries: PropTypes.array
+}
 
 const CommentariesSection = ({ commentaries }) => {
 
@@ -26,6 +31,8 @@ const CommentariesSection = ({ commentaries }) => {
     </section>
   )
 }
+
+CommentariesSection.propTypes = propTypes
 
 // Iterate all commentaries
 const createCommentariesTree = (commentaries) => {

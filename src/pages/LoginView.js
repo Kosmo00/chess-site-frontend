@@ -18,7 +18,7 @@ import { LoginContext } from '../App'
 
 import { postLogin } from '../endpoints'
 
-function LoginView() {
+const LoginView = () => {
 
   const [nick, setNick] = useState('')
   const [password, setPassword] = useState('')

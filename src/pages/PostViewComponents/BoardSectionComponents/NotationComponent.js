@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // react-bootstrap components
 import Card from 'react-bootstrap/Card'
@@ -16,4 +17,8 @@ const NotationComponent = ({ height }) => {
   )
 }
 
-export default NotationComponent
+NotationComponent.propTypes = {
+  height: PropTypes.number
+}
+
+export default React.memo(NotationComponent)

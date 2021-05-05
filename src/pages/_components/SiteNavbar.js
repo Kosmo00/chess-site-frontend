@@ -9,7 +9,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 // chess-site providers
 import { LoginContext } from '../../App'
 
-const SiteNavbar = props => {
+const SiteNavbar = () => {
 
   const userContext = useContext(LoginContext)
 

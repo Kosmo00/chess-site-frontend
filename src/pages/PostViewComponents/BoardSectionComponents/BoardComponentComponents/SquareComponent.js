@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 // chess-site components
 import PieceComponent from './PieceComponent'
@@ -58,7 +59,7 @@ const SquareComponent = ({ color, posX, posY, width }) => {
       boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
     }
   }
-
+  
   return (
     <div
       className='d-flex align-items-center justify-content-center'
@@ -79,6 +80,13 @@ const SquareComponent = ({ color, posX, posY, width }) => {
       }
     </div>
   )
+}
+
+SquareComponent.propTypes = {
+  color: PropTypes.string.isRequired,
+  posX: PropTypes.number.isRequired,
+  posY: PropTypes.number.isRequired,
+  width: PropTypes.number
 }
 
 export default SquareComponent

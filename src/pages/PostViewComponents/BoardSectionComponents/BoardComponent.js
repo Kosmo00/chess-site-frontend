@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // chess-site components
-import SquareComponent from './BoardComponentComponents/SquareComponent'
+import RenderSquare from './BoardComponentComponents/RenderSquare'
 
 const BoardComponent = ({ width }) => {
   const maxWidth = window.innerHeight - 25
@@ -21,16 +22,8 @@ const BoardComponent = ({ width }) => {
   )
 }
 
-const RenderSquare = (posX, posY, width) => {
-  const color = (posX + posY) % 2 ? 'sandybrown' : 'antiquewhite'
-  width -= width % 8 + 32
-  return <SquareComponent
-    key={posX * 8 + posY}
-    posX={posX}
-    posY={posY}
-    color={color}
-    width={width / 8}
-  />
+BoardComponent.propTypes = {
+  width: PropTypes.number
 }
 
-export default BoardComponent
+export default React.memo(BoardComponent)

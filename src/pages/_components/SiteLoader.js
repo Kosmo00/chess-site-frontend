@@ -6,7 +6,7 @@ import { PulseLoader } from 'react-spinners'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 
-function SiteLoader() {
+const SiteLoader = () => {
   return (
     <Container fluid className='vh-100 d-flex align-items-center justify-content-center'>
       <Row>
