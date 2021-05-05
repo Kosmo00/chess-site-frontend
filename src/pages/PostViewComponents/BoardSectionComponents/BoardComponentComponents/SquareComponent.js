@@ -7,12 +7,12 @@ import PieceComponent from './PieceComponent'
 // chess-site contexts
 import { BoardContext } from '../../BoardSection'
 
-const SquareComponent = ({ color, posX, posY, width }) => {
+const SquareComponent = ({ color, posX, posY, width, is_checked, piece, is_selected, is_legal }) => {
 
   const boardContext = useContext(BoardContext)
   const { boardState, boardDispatch } = boardContext
 
-  const { pieces_colocation, legal_moves, selected_piece, check_square } = boardState
+  /*const { pieces_colocation, legal_moves, selected_piece, check_square } = boardState
   const allow_move = legal_moves[posX][posY]
   const atacked_piece = pieces_colocation[posX][posY]
   // Get the selected piece data
@@ -21,27 +21,27 @@ const SquareComponent = ({ color, posX, posY, width }) => {
   // Get the checked king square data
   const pos_c_piece_x = check_square === null ? null : check_square[0]
   const pos_c_piece_y = check_square === null ? null : check_square[1]
-
+*/
   const [background, setBackground] = useState(color)
 
 
   useEffect(() => {
-    if (allow_move && atacked_piece !== '') {
+    if (is_legal && piece !== '') {
       setBackground(`radial-gradient(${color} 50%, #4CC054 100%`)
     }
-    else if (allow_move) {
+    else if (is_legal) {
       setBackground(`radial-gradient(${color} 5%, #2EAA36 15%, ${color} 20%)`)
     }
-    else if (posX === posSPieceX && posY === posSPieceY) {
+    else if (is_selected) {
       setBackground(`radial-gradient(${color} 50%, #4B64A4 100%`)
     }
-    else if (posX === pos_c_piece_x && posY === pos_c_piece_y) {
+    else if (is_checked) {
       setBackground(`radial-gradient(${color} 50%, red 100%`)
     }
     else {
       setBackground(color)
     }
-  }, [color, atacked_piece, allow_move, posSPieceX, posSPieceY, posX, posY, pos_c_piece_x, pos_c_piece_y])
+  }, [color, is_legal, piece, is_selected, is_checked])
 
   const handleDrop = (ev) => {
     ev.preventDefault()
@@ -54,12 +54,12 @@ const SquareComponent = ({ color, posX, posY, width }) => {
     boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
   }
   const handleDrag = () => {
-    if (selected_piece === null) {
+    if (!is_selected && ((boardState.turn === 1)===(/[A-Z]/.test(piece)))) {
       boardDispatch({ type: 'event', value: 'drag' })
       boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
     }
   }
-  
+  console.log('asd')
   return (
     <div
       className='d-flex align-items-center justify-content-center'
@@ -75,8 +75,8 @@ const SquareComponent = ({ color, posX, posY, width }) => {
         height: width
       }}>
       {
-        pieces_colocation[posX][posY] !== ''
-        && <PieceComponent square_piece={pieces_colocation[posX][posY]} width={width} posX={posX} posY={posY} />
+        piece
+        && <PieceComponent square_piece={piece} width={width} posX={posX} posY={posY} />
       }
     </div>
   )

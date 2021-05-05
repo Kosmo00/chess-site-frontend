@@ -22,7 +22,7 @@ const BoardSection = () => {
       <BoardContext.Provider value={{ boardState: boardState, boardDispatch: boardDispatch }}>
         <Col xs={7}>
           {resizeListener}
-          <BoardComponent width={sizes.width} />
+          <BoardComponent width={sizes.width} boardState={boardState} />
         </Col>
         <Col xs={5}>
           <NotationComponent height={sizes.width - 32 - sizes.width % 8} />
