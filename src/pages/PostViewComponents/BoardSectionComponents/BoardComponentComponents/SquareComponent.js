@@ -59,7 +59,7 @@ const SquareComponent = ({ color, posX, posY, width }) => {
       boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
     }
   }
-  console.log('asd')
+  
   return (
     <div
       className='d-flex align-items-center justify-content-center'

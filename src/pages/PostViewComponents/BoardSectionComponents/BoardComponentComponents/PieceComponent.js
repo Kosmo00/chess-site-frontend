@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const PieceComponent = ({ square_piece, width }) => {
 
@@ -40,6 +41,11 @@ const PieceComponent = ({ square_piece, width }) => {
       draggable={true}
     />
   )
+}
+
+PieceComponent.propTypes = {
+  square_piece: PropTypes.string.isRequired,
+  width: PropTypes.number
 }
 
 export default React.memo(PieceComponent)

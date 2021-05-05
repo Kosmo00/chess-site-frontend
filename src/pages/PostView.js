@@ -9,10 +9,6 @@ import SiteError from './_components/SiteError'
 
 import { getPostEndpoint } from '../endpoints'
 
-const propTypes = {
-  match: PropTypes.object.isRequired
-}
-
 const PostView = ({ match }) => {
 
   const [post, setPost] = useState({})
@@ -47,6 +43,8 @@ const PostView = ({ match }) => {
   )
 }
 
-PostView.propTypes = propTypes
+PostView.propTypes = {
+  match: PropTypes.object.isRequired
+}
 
 export default PostView

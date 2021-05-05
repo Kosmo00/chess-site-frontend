@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // react-bootstrap components
 import Container from 'react-bootstrap/Container'
@@ -22,6 +23,11 @@ const WithAside = ({ children, id }) => {
       </Row>
     </Container>
   )
+}
+
+WithAside.propTypes = {
+  children: PropTypes.element.isRequired,
+  id: PropTypes.string
 }
 
 export default WithAside

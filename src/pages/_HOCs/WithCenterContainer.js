@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // react-bootstrap components
 
@@ -15,6 +16,10 @@ const WithCenterContainer = ({ children }) => {
       </Container>
     </div>
   )
+}
+
+WithCenterContainer.propTypes = {
+  children: PropTypes.element.isRequired
 }
 
 export default WithCenterContainer
