@@ -10,13 +10,13 @@ import BoardComponent from './BoardSectionComponents/BoardComponent'
 import NotationComponent from './BoardSectionComponents/NotationComponent'
 
 // chess-site reducers
-import useBoardSectionReducer from './BoardSectionHooks/BoardSectionReducer'
+import useBoardReducer from './BoardSectionHooks/useBoardReducer'
 
 export const BoardContext = React.createContext()
 
 const BoardSection = () => {
   const [resizeListener, sizes] = useResizeAware()
-  const { boardState, boardDispatch } = useBoardSectionReducer()
+  const { boardState, boardDispatch } = useBoardReducer()
   return (
     <Row>
       <BoardContext.Provider value={{ boardState: boardState, boardDispatch: boardDispatch }}>

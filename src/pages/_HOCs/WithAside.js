@@ -26,7 +26,7 @@ const WithAside = ({ children, id }) => {
 }
 
 WithAside.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.any.isRequired,
   id: PropTypes.string
 }
 
