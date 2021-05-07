@@ -25,7 +25,8 @@ const BoardComponent = ({ width, boardState }) => {
 }
 
 BoardComponent.propTypes = {
-  width: PropTypes.number
+  width: PropTypes.number,
+  boardState: PropTypes.object
 }
 
 export default React.memo(BoardComponent)

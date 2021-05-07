@@ -27,6 +27,10 @@ RenderSquare.propTypes = {
   posX: PropTypes.number.isRequired,
   posY: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
+  check_square: PropTypes.array,
+  is_legal: PropTypes.bool.isRequired,
+  piece: PropTypes.string.isRequired,
+  piece_selected: PropTypes
 }
 
 export default RenderSquare

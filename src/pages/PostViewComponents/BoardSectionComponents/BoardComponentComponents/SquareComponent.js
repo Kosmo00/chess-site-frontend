@@ -12,16 +12,6 @@ const SquareComponent = ({ color, posX, posY, width, is_checked, piece, is_selec
   const boardContext = useContext(BoardContext)
   const { boardState, boardDispatch } = boardContext
 
-  /*const { pieces_colocation, legal_moves, selected_piece, check_square } = boardState
-  const allow_move = legal_moves[posX][posY]
-  const atacked_piece = pieces_colocation[posX][posY]
-  // Get the selected piece data
-  const posSPieceX = selected_piece === null ? null : selected_piece[0]
-  const posSPieceY = selected_piece === null ? null : selected_piece[1]
-  // Get the checked king square data
-  const pos_c_piece_x = check_square === null ? null : check_square[0]
-  const pos_c_piece_y = check_square === null ? null : check_square[1]
-*/
   const [background, setBackground] = useState(color)
 
 
@@ -54,12 +44,12 @@ const SquareComponent = ({ color, posX, posY, width, is_checked, piece, is_selec
     boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
   }
   const handleDrag = () => {
-    if (!is_selected && ((boardState.turn === 1)===(/[A-Z]/.test(piece)))) {
+    if (!is_selected && ((boardState.turn === 1) === (/[A-Z]/.test(piece)))) {
       boardDispatch({ type: 'event', value: 'drag' })
       boardDispatch({ type: 'press square', value: { posX: posX, posY: posY } })
     }
   }
-  console.log('asd')
+
   return (
     <div
       className='d-flex align-items-center justify-content-center'
@@ -86,7 +76,11 @@ SquareComponent.propTypes = {
   color: PropTypes.string.isRequired,
   posX: PropTypes.number.isRequired,
   posY: PropTypes.number.isRequired,
-  width: PropTypes.number
+  width: PropTypes.number,
+  is_checked: PropTypes.bool.isRequired,
+  is_legal: PropTypes.bool.isRequired,
+  is_selected: PropTypes.bool.isRequired,
+  piece: PropTypes.string.isRequired
 }
 
 export default SquareComponent
