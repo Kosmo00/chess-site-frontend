@@ -33,7 +33,7 @@ export const prepareLegalMoves = (state) => {
  * 
  * @param {object} state state of the board 
  * 
- * @returns {array | null}
+ * @returns {Array | null}
  */
 export const comprobateCheck = (state) => {
   const { selected_piece, pieces_colocation } = state
@@ -161,7 +161,7 @@ export const getColorOfPiece = (piece, board, plusXAxis = 0, plusYAxis = 0) => {
  * @returns {boolean}
  * 
  */
-export const isSquareEmpty = (piece, board, plusXAxis, plusYAxis) => {
+export const isSquareEmpty = (piece, board, plusXAxis = 0, plusYAxis = 0) => {
   return board[piece[0] + plusXAxis][piece[1] + plusYAxis] === ''
 }
 
@@ -219,6 +219,13 @@ export const getAllColorLegalMoves = (state) => {
   return legal_moves
 }
 
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state
+ * 
+ * @returns {boolean}
+ */
 export const comprobateCheckMate = (state) => {
   const { pieces_colocation, check_square } = state
   const color_piece = getColorOfPiece(check_square, pieces_colocation)
@@ -240,7 +247,12 @@ export const comprobateCheckMate = (state) => {
   return true
 }
 
-
+/**
+ * @author Kosmo
+ * 
+ * @param {Array<Array<boolean>>} legal_moves 
+ * @returns {boolean}
+ */
 const comprobateExistenceOfLegalMove = (legal_moves) => {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
@@ -250,4 +262,102 @@ const comprobateExistenceOfLegalMove = (legal_moves) => {
     }
   }
   return false
+}
+
+/**
+ * Iterate all the squares and check if more than one piece of same type can ocupate the new square
+ * 
+ * @param {object} state state of the board
+ * @param {Array<number>} new_square array with the coordinates of a new square
+ * 
+ * @returns {array<string>} array of pieces 
+ */
+export const comprobateAccesibility = (state, new_square) => {
+  const { pieces_colocation, selected_piece } = state
+  let pieces_with_accessibility = []
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (selected_piece[0] === i && selected_piece[1] === j) {
+        continue;
+      }
+      if (pieces_colocation[i][j] === pieces_colocation[selected_piece[0]][selected_piece[1]]) {
+        let legal_movements = buildEmptyArrayOfLegalMoves()
+        legal_movements = prepareLegalMoves({ ...state, legal_moves: legal_movements, selected_piece: [i, j] })
+        legal_movements = validateLegalMovements({ ...state, legal_movements: legal_movements, selected_piece: [i, j] })
+        if (legal_movements[i][j])
+          pieces_with_accessibility.push([i, j])
+      }
+    }
+  }
+  return pieces_with_accessibility
+}
+
+/**
+ * @author Kosmo   
+ * 
+ * @description interprete a FEN notation and set the contained board state
+ * 
+ * @param {object} state board state
+ * @param {string} fen FEN notation
+ * 
+ * @todo complete the lastest parameters
+ */
+export const interpreteFen = (state, fen) => {
+  let iterator = 0
+  state.pieces_colocation = createEmptyBoard()
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (/[1-9]/.test(fen[iterator])) {
+        j += parseInt(fen[iterator]) - 1
+      }
+      else {
+        state.pieces_colocation[i][j] = fen[iterator]
+      }
+
+      iterator++
+    }
+    iterator++
+  }
+  iterator++
+
+  if (fen[iterator] === 'w') {
+    state.turn = 1
+  }
+  else {
+    state.turn = -1
+  }
+  iterator++;
+
+  do {
+    iterator++
+  } while (fen[iterator] !== ' ')
+
+  do {
+    iterator++
+
+  } while (fen[iterator] !== ' ')
+
+  do {
+    iterator++
+  } while (fen[iterator] !== ' ')
+
+  iterator++
+
+  state.n_move = parseInt(fen[iterator])
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @returns {Array<Array<boolean>>} board without pieces
+ */
+const createEmptyBoard = () => {
+  let empty_board = []
+  for (let i = 0; i < 8; i++) {
+    empty_board[i] = []
+    for (let j = 0; j < 8; j++) {
+      empty_board[i][j] = ''
+    }
+  }
+  return empty_board
 }
