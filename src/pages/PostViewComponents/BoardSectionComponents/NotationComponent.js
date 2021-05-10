@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 // react-bootstrap components
 import Card from 'react-bootstrap/Card'
 
+// chess-site components
+import NotationBuilder from './NotationComponentComponents/NotationBuilder'
+
 const NotationComponent = ({ height }) => {
   return (
     <Card style={{ height: height }}>
@@ -11,7 +14,7 @@ const NotationComponent = ({ height }) => {
         Datos del juego
       </Card.Header>
       <Card.Body>
-        Juego
+        <NotationBuilder />
       </Card.Body>
     </Card>
   )
