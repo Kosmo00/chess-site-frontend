@@ -71,7 +71,9 @@ const generateFen = (state) => {
     if (count_free_squares > 0) {
       fen += count_free_squares
     }
-    fen += '/'
+    if (i < 7) {
+      fen += '/'
+    }
   }
   fen += ' '
   if (state.turn === 1) {

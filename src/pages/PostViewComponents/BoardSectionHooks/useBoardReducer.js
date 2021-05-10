@@ -16,7 +16,7 @@ const tree_notation = new MoveNotation(
   1,
   '',
   null,
-  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0',
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   'w'
 )
 
@@ -84,7 +84,7 @@ const changeCursor = (state, cursor) => {
   interpreteFen(state, cursor.fen)
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
-  console.log(state)
+
   return state
 }
 
@@ -124,6 +124,7 @@ const fullMovement = (state, posX, posY) => {
       move(state, posX, posY)
     }
   }
+
   return state
 }
 
