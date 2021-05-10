@@ -318,7 +318,6 @@ export const interpreteFen = (state, fen) => {
     }
     iterator++
   }
-  iterator++
 
   if (fen[iterator] === 'w') {
     state.turn = 1

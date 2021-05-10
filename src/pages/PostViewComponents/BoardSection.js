@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useResizeAware from 'react-resize-aware'
 
 // react-bootstrap components
@@ -17,6 +17,23 @@ export const BoardContext = React.createContext()
 const BoardSection = () => {
   const [resizeListener, sizes] = useResizeAware()
   const { boardState, boardDispatch } = useBoardReducer()
+
+  const [variantsView, setVariantsView] = useState(false)
+
+  useEffect(() => {
+    window.onkeydown = ('keypress', ev => {
+      if (ev.code === 'ArrowLeft' && boardState.cursor.parent !== null) {
+        boardDispatch({ type: 'change cursor', value: boardState.cursor.parent })
+      }
+      if (ev.code === 'ArrowRight' && boardState.cursor.children_array !== undefined && boardState.cursor.children_array.length > 0) {
+        boardDispatch({ type: 'change cursor', value: boardState.cursor.children_array[0] })
+      }
+    })
+    return () => {
+      //window.removeEventListener('keypress')
+    }
+  }, [boardState, boardDispatch])
+
   return (
     <Row>
       <BoardContext.Provider value={{ boardState: boardState, boardDispatch: boardDispatch }}>
