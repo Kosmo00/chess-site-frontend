@@ -345,6 +345,15 @@ export const interpreteFen = (state, fen) => {
   state.n_move = parseInt(fen[iterator])
 }
 
+export const getTurn = fen => {
+  let iterator = 0
+  while (fen[iterator] !== ' ') {
+    iterator++
+  }
+  iterator++;
+  return fen[iterator]
+}
+
 /**
  * @author Kosmo
  * 
