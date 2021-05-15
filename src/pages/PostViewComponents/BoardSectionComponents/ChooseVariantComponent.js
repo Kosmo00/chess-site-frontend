@@ -7,9 +7,6 @@ import Button from 'react-bootstrap/Button'
 // chess-site components
 import VariantComponent from './ChooseVariant/VariantComponent';
 
-// chess-site utilities
-import { getTurn } from '../BoardSectionHooks/utils';
-
 const ChooseVariantComponent = ({ variants, setVariantsView, returnVariant }) => {
   const [select, setSelect] = useState(0)
 
@@ -50,7 +47,6 @@ const ChooseVariantComponent = ({ variants, setVariantsView, returnVariant }) =>
         default:
           break
       }
-      //console.log(ref.current)
     }
     return () => {
       window.onkeydown = null
@@ -67,7 +63,6 @@ const ChooseVariantComponent = ({ variants, setVariantsView, returnVariant }) =>
         </Modal.Header>
         <Modal.Body ref={ref} style={{ height: '150px' }}>
           {buildVariants(variants, select, setSelect)}
-          {console.log(ref)}
         </Modal.Body>
         <Modal.Footer>
           <div className='text-center'>
@@ -108,8 +103,8 @@ const buildVariants = (variants, selected, setSelect) => {
   for (let i = 0; i < variants.length; i++) {
     let variant_text = ''
     variant_text += variants[i].n_move
-    const move_turn = getTurn(variants[i].fen)
-    if (move_turn === 'b') {
+    const move_turn = variants[i].getTurnToAnnotate()
+    if (move_turn === 1) {
       variant_text += '-'
     }
     else {

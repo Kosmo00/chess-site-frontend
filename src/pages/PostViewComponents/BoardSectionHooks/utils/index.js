@@ -1,4 +1,5 @@
 import legal_movements from '../movements'
+import { findKingPosition } from '../pieces-moves/king'
 
 /**
  * @author Kosmo
@@ -31,30 +32,6 @@ export const prepareLegalMoves = (state) => {
 /**
  * @author Kosmo
  * 
- * @param {object} state state of the board 
- * 
- * @returns {Array | null}
- */
-export const comprobateCheck = (state) => {
-  const { selected_piece, pieces_colocation } = state
-  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
-
-  let legal_moves = getAllColorLegalMoves(state)
-
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
-      if (legal_moves[i][j] && /[k, K]/.test(pieces_colocation[i][j]) && color_square_piece !== color_piece) {
-        return [i, j]
-      }
-    }
-  }
-  return null
-}
-
-/**
- * @author Kosmo
- * 
  * @param {object} state state of board
  */
 export const validateLegalMovements = (state) => {
@@ -68,28 +45,8 @@ export const validateLegalMovements = (state) => {
   else {
     king_position = findKingPosition(pieces_colocation, color_piece)
   }
-  let simulated_legal_movements = null
 
-  return exploreAllPosibleMoves(state, king_position, simulated_legal_movements)
-}
-
-/**
- * @author Kosmo
- * 
- * @param {Array<Array<string>>} pieces_colocation 
- * @param {'W'||'B'} color_piece 
- * 
- * @returns {[number, number]}
- */
-const findKingPosition = (pieces_colocation, color_piece) => {
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
-      if (/[k, K]/.test(pieces_colocation[i][j]) && color_square_piece === color_piece) {
-        return [i, j]
-      }
-    }
-  }
+  return exploreAllPosibleMoves(state, king_position)
 }
 
 /**
@@ -102,7 +59,6 @@ const findKingPosition = (pieces_colocation, color_piece) => {
  */
 const exploreAllPosibleMoves = (state, king_position) => {
   let { selected_piece, pieces_colocation, legal_moves } = state
-  let simulated_legal_movements = null
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       if (legal_moves[i][j]) {
@@ -112,7 +68,7 @@ const exploreAllPosibleMoves = (state, king_position) => {
         if (king_position[0] === selected_piece[0] && king_position[1] === selected_piece[1]) {
           king_position = [i, j]
         }
-        simulated_legal_movements = getAllColorLegalMoves({ ...state, selected_piece: [i, j] })
+        const simulated_legal_movements = getAllColorLegalMoves({ ...state, selected_piece: [i, j] })
 
         if (simulated_legal_movements[king_position[0]][king_position[1]]) {
           legal_moves[i][j] = false
@@ -222,38 +178,10 @@ export const getAllColorLegalMoves = (state) => {
 /**
  * @author Kosmo
  * 
- * @param {object} state board state
- * 
- * @returns {boolean}
- */
-export const comprobateCheckMate = (state) => {
-  const { pieces_colocation, check_square } = state
-  const color_piece = getColorOfPiece(check_square, pieces_colocation)
-
-  let moves = buildEmptyArrayOfLegalMoves()
-
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      const color_square_piece = getColorOfPiece([i, j], pieces_colocation)
-      if (color_square_piece === color_piece) {
-        moves = prepareLegalMoves({ ...state, selected_piece: [i, j], legal_moves: moves })
-        moves = validateLegalMovements({ ...state, legal_moves: moves, selected_piece: [i, j] })
-        if (comprobateExistenceOfLegalMove(moves)) {
-          return false
-        }
-      }
-    }
-  }
-  return true
-}
-
-/**
- * @author Kosmo
- * 
  * @param {Array<Array<boolean>>} legal_moves 
  * @returns {boolean}
  */
-const comprobateExistenceOfLegalMove = (legal_moves) => {
+export const comprobateExistenceOfLegalMove = (legal_moves) => {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       if (legal_moves[i][j] === true) {
@@ -268,11 +196,10 @@ const comprobateExistenceOfLegalMove = (legal_moves) => {
  * Iterate all the squares and check if more than one piece of same type can ocupate the new square
  * 
  * @param {object} state state of the board
- * @param {Array<number>} new_square array with the coordinates of a new square
  * 
  * @returns {array<string>} array of pieces 
  */
-export const comprobateAccesibility = (state, new_square) => {
+export const comprobateAccesibility = (state) => {
   const { pieces_colocation, selected_piece } = state
   let pieces_with_accessibility = []
   for (let i = 0; i < 8; i++) {
@@ -293,73 +220,11 @@ export const comprobateAccesibility = (state, new_square) => {
 }
 
 /**
- * @author Kosmo   
- * 
- * @description interprete a FEN notation and set the contained board state
- * 
- * @param {object} state board state
- * @param {string} fen FEN notation
- * 
- * @todo complete the lastest parameters
- */
-export const interpreteFen = (state, fen) => {
-  let iterator = 0
-  state.pieces_colocation = createEmptyBoard()
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      if (/[1-9]/.test(fen[iterator])) {
-        j += parseInt(fen[iterator]) - 1
-      }
-      else {
-        state.pieces_colocation[i][j] = fen[iterator]
-      }
-
-      iterator++
-    }
-    iterator++
-  }
-
-  if (fen[iterator] === 'w') {
-    state.turn = 1
-  }
-  else {
-    state.turn = -1
-  }
-  iterator++;
-
-  do {
-    iterator++
-  } while (fen[iterator] !== ' ')
-
-  do {
-    iterator++
-
-  } while (fen[iterator] !== ' ')
-
-  do {
-    iterator++
-  } while (fen[iterator] !== ' ')
-
-  iterator++
-
-  state.n_move = parseInt(fen[iterator])
-}
-
-export const getTurn = fen => {
-  let iterator = 0
-  while (fen[iterator] !== ' ') {
-    iterator++
-  }
-  iterator++;
-  return fen[iterator]
-}
-
-/**
  * @author Kosmo
  * 
  * @returns {Array<Array<boolean>>} board without pieces
  */
-const createEmptyBoard = () => {
+export const createEmptyBoard = () => {
   let empty_board = []
   for (let i = 0; i < 8; i++) {
     empty_board[i] = []
@@ -368,4 +233,16 @@ const createEmptyBoard = () => {
     }
   }
   return empty_board
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {Array<Array<string>>} board board
+ * @param {[number, number]} square 
+ * 
+ * @returns {string}
+ */
+export const getPiece = (board, square) => {
+  return board[square[0]][square[1]]
 }

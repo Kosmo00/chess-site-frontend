@@ -1,22 +1,27 @@
-import { comprobateCheckMate, isSquareEmpty } from './utils'
+import { isSquareEmpty, prepareLegalMoves, buildEmptyArrayOfLegalMoves } from './utils'
+import { comprobateCheckMate } from './pieces-moves/king'
 import MoveNotation from './utils/MoveNotation'
 
-export const annotateMove = (state, new_square) => {
-  const move = annotate(state, new_square)
+export const annotateMove = (state, new_square, special_move) => {
+  let move
+  switch(special_move){
+    case 'KS': 
+    move = '0-0' 
+    break
+    case 'QS':
+    move = '0-0-0'
+    break
+    default:
+    move = annotate(state, new_square)
+  }
   if (!state.cursor.children_set.has(move)) {
     state.cursor.children_set.add(move)
-    const new_move = new MoveNotation(move, state.n_move, 'e2e4', state.cursor, generateFen(state), state.turn === 1 ? 'b' : 'w')
+    const new_move = new MoveNotation(generateFen(state), move, 'e2e4', state.cursor)
     state.cursor.children_array.push(new_move)
     state.cursor = new_move
   }
   else {
     state.cursor = findVariant(state.cursor.children_array, move)
-  }
-  //console.log('actual move', state.cursor)
-  //console.log('notation', state.notation)
-
-  if (state.turn === -1) {
-    state.n_move++
   }
 }
 
@@ -32,18 +37,6 @@ export const deleteVariant = (state, new_square) => {
 
 }
 
-export const realizeMovement = (state, new_square) => {
-
-}
-
-export const goBackMovement = (state) => {
-
-}
-
-export const goToMovement = (state) => {
-
-}
-
 /**
  * @author Kosmo
  * 
@@ -52,43 +45,49 @@ export const goToMovement = (state) => {
  * @returns {string} position FEN notation
  */
 const generateFen = (state) => {
-  let fen = ''
+  let fen = []
 
+  fen.push(generateFenBoard(state.pieces_colocation))
+  fen.push(state.turn === 1 ? 'b' : 'w')
+  fen.push('KQkq')
+  fen.push('-')
+  fen.push('1')
+  fen.push(parseInt(state.n_move + (state.turn === -1 ? 1 : 0)))
+
+  return fen.join(' ')
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {Array<Array<string>>} board 
+ * 
+ * @returns {string} FEN board generated
+ */
+const generateFenBoard = board => {
+  let fen_board = ''
   for (let i = 0; i < 8; i++) {
     let count_free_squares = 0;
     for (let j = 0; j < 8; j++) {
-      if (isSquareEmpty([i, j], state.pieces_colocation)) {
+      if (isSquareEmpty([i, j], board)) {
         count_free_squares++
       }
       else {
         if (count_free_squares > 0) {
-          fen += count_free_squares
+          fen_board += count_free_squares
           count_free_squares = 0
         }
-        fen += state.pieces_colocation[i][j]
+        fen_board += board[i][j]
       }
     }
     if (count_free_squares > 0) {
-      fen += count_free_squares
+      fen_board += count_free_squares
     }
     if (i < 7) {
-      fen += '/'
+      fen_board += '/'
     }
   }
-  fen += ' '
-  if (state.turn === 1) {
-    fen += 'b'
-  }
-  else {
-    fen += 'w'
-  }
-  fen += ' '
-  fen += 'KQkq '
-  fen += '- '
-  fen += '1 '
-  fen += parseInt(state.n_move + (state.turn === -1 ? 1 : 0))
-
-  return fen
+  return fen_board
 }
 
 /**
@@ -103,10 +102,15 @@ const annotate = (state, new_square) => {
   const { pieces_colocation, check_square } = state
   const column = 'abcdefgh'
   let move_notation = ''
+
   if (pieces_colocation[new_square[0]][new_square[1]].toUpperCase() !== 'P') {
     move_notation += pieces_colocation[new_square[0]][new_square[1]].toUpperCase()
+    move_notation += addNecesaryLocation(state, new_square)
+    move_notation += addCaptureNotation(state, new_square)
   }
-
+  else {
+    move_notation += addCaptureNotation(state, new_square)
+  }
   move_notation += column[new_square[1]] + (8 - new_square[0])
 
   if (check_square !== null) {
@@ -117,7 +121,6 @@ const annotate = (state, new_square) => {
       move_notation += '+'
     }
   }
-
   return move_notation
 }
 
@@ -134,5 +137,107 @@ const findVariant = (variants, move) => {
     if (variants[i].move === move) {
       return variants[i]
     }
+  }
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @description comprobate a piece capture movement and return the capture notation
+ * 
+ * @param {object} state board state
+ * @param {[number, number]} new_square square of the moved piece
+ * 
+ * @returns {string} capture notation
+ */
+const addCaptureNotation = (state, new_square) => {
+  const { selected_piece, cursor, pieces_colocation } = state
+  const previousBoard = cursor.setBoardToArray()
+  const column = 'abcdefgh'
+  let captureNotation = ''
+  if (previousBoard[new_square[0]][new_square[1]] !== '') {
+    if (pieces_colocation[new_square[0]][new_square[1]].toUpperCase() === 'P') {
+      captureNotation += column[selected_piece[1]]
+    }
+    captureNotation += 'x'
+  }
+  return captureNotation
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state
+ * @param {[number, number]} new_square square of the moved piece
+ * 
+ * @returns {string} location necesary for the moved piece
+ */
+const addNecesaryLocation = (state, new_square) => {
+  const posibilities = getCandidatePiecesToAnSquare(state, new_square)
+  let column = 'abcdefgh'
+  let location = ''
+  if (posibilities[0]) {
+    location += column[state.selected_piece[1]]
+  } if (posibilities[1]) {
+    location += (8 - state.selected_piece[0])
+  }
+  return location
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state
+ * @param {[number, number]} new_square square of the moved piece
+ * 
+ * @returns {[boolean, boolean]} locate data which need to show
+ */
+const getCandidatePiecesToAnSquare = (state, new_square) => {
+  const { pieces_colocation, selected_piece } = state
+  changeColor(state, new_square)
+  const posible_locations = prepareLegalMoves({ ...state, selected_piece: new_square, legal_moves: buildEmptyArrayOfLegalMoves() })
+  changeColor(state, new_square)
+  const piece_moved = pieces_colocation[new_square[0]][new_square[1]]
+
+  let posibilities = [false, false]
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (i === selected_piece[0] && j === selected_piece[1]) {
+        continue
+      }
+      if (i === new_square[0] && j === new_square[1]) {
+        continue
+      }
+      if (posible_locations[i][j] === true && pieces_colocation[i][j] === piece_moved) {
+        if (i === selected_piece[0]) {
+          posibilities[0] = true
+        }
+        else if (j === selected_piece[1]) {
+          posibilities[1] = true
+        }
+        else if (posibilities[1] === false) {
+          posibilities[0] = true
+        }
+      }
+    }
+  }
+  return posibilities
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @description Changes the square piece color
+ * 
+ * @param {object} state board state, should be passed by reference
+ * @param {[number, number]} square Square of a piece
+ */
+const changeColor = (state, square) => {
+  const { pieces_colocation } = state
+  if (/[A-Z]/.test(state.pieces_colocation[square[0]][square[1]])) {
+    pieces_colocation[square[0]][square[1]] = pieces_colocation[square[0]][square[1]].toLowerCase()
+  }
+  else {
+    pieces_colocation[square[0]][square[1]] = pieces_colocation[square[0]][square[1]].toUpperCase()
   }
 }
