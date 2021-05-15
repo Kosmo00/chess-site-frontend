@@ -3,21 +3,20 @@ import { useReducer } from 'react'
 import {
   prepareLegalMoves,
   validateLegalMovements,
-  comprobateCheck,
   buildEmptyArrayOfLegalMoves,
-  interpreteFen
+  getPiece
 } from './utils'
+
+import { comprobateCheck, validateCastle, doCastle } from './pieces-moves/king'
 
 import { annotateMove } from './notation'
 import MoveNotation from './utils/MoveNotation'
 
 const tree_notation = new MoveNotation(
-  'initial position',
-  1,
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  '',
   '',
   null,
-  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-  'w'
 )
 
 const boardInitialState = {
@@ -41,6 +40,8 @@ const boardInitialState = {
     [false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false]
   ],
+  castle: ['K', 'Q', 'k', 'q'],
+  ap_square: null,
   notation: tree_notation,
   selected_piece: null,
   check_square: null,
@@ -81,7 +82,10 @@ const useBoardReducer = () => {
  */
 const changeCursor = (state, cursor) => {
   state.cursor = cursor
-  interpreteFen(state, cursor.fen)
+  state.turn = cursor.getTurn()
+  state.pieces_colocation = cursor.setBoardToArray()
+  state.castle = cursor.castles
+  state.n_move = cursor.n_move
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
 
@@ -98,10 +102,6 @@ const changeCursor = (state, cursor) => {
  * @param {number} posY position y of the square who runs the movements event
  * 
  * @returns {object} new state for the board
- * 
- * @todo 
- * - Divide in subfunctions
- * - Add notation functionallity
  */
 const fullMovement = (state, posX, posY) => {
   if (state.selected_piece === null && state.pieces_colocation[posX][posY] !== '') {
@@ -155,11 +155,18 @@ const validatePieceSelected = (state, posX, posY) => {
  */
 const move = (state, posX, posY) => {
   if (state.legal_moves[posX][posY]) {
-    state.pieces_colocation[posX][posY] = state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]]
-    state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
-    state.check_square = comprobateCheck(state)
-    annotateMove(state, [posX, posY])
-    state.turn *= -1
+    specialMovesValues(state, posX, posY)
+    let special_move
+    if (doCastle(state, posX, posY)) {
+      special_move = (posY === 6 ? 'KS' : 'QS')
+    }
+    else {
+      state.pieces_colocation[posX][posY] = getPiece(state.pieces_colocation, state.selected_piece)
+      state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
+      state.check_square = comprobateCheck(state)
+    }
+    annotateMove(state, [posX, posY], special_move)
+    manageTurn(state)
   }
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
@@ -179,6 +186,67 @@ const selectAPiece = (state, posX, posY) => {
   state.selected_piece[1] = posY
   state.legal_moves = prepareLegalMoves(state)
   state.legal_moves = validateLegalMovements(state)
+  if (getPiece(state.pieces_colocation, state.selected_piece).toUpperCase() === 'K') {
+    validateCastle(state)
+  }
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state 
+ */
+const manageTurn = state => {
+  if (state.turn === -1) {
+    state.n_move++
+  }
+  state.turn *= -1
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state
+ * @param {number} posX pos x axis of a moved piece square
+ * @param {number} posY pos y axis of a moved piece square
+ */
+const specialMovesValues = (state, posX, posY) => {
+  const piece_moved = getPiece(state.pieces_colocation, state.selected_piece)
+  const color_piece = /[A-Z]/.test(piece_moved) ? 'w' : 'b'
+  removeCastle(state, piece_moved, color_piece)
+
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {object} state board state
+ * @param {string} piece_moved 
+ * @param {string} color_piece color of moved piece
+ */
+const removeCastle = (state, piece_moved, color_piece) => {
+  if (piece_moved.toUpperCase() === 'K') {
+    if (color_piece === 'w') {
+      state.castle[0] = ''
+      state.castle[1] = ''
+    }
+    else {
+      state.castle[2] = ''
+      state.castle[3] = ''
+    }
+  }
+  if (getPiece(state.pieces_colocation, [0, 0]) !== 'r') {
+    state.castle[3] = ''
+  }
+  if (getPiece(state.pieces_colocation, [0, 7]) !== 'r') {
+    state.castle[2] = ''
+  }
+  if (getPiece(state.pieces_colocation, [7, 0]) !== 'R') {
+    state.castle[1] = ''
+  }
+  if (getPiece(state.pieces_colocation, [7, 7]) !== 'R') {
+    state.castle[0] = ''
+  }
 }
 
 export default useBoardReducer

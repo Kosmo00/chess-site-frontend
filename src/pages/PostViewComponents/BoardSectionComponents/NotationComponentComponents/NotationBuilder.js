@@ -17,42 +17,40 @@ const NotationBuilder = () => {
   )
 }
 
-const prepareComponents = (notation, boardDispatch, cursor) => {
-  if (notation.children_array !== undefined && notation.children_array.length === 0) {
+const prepareComponents = (notation, boardDispatch, cursor, show_n_move = true) => {
+  const { children_array } = notation
+  const has_variants = children_array.length > 1
+  if (children_array !== undefined && children_array.length === 0) {
     return ''
-  }
-  let show_n_move = false
-  if (notation.piece_to_move === 'w') {
-    show_n_move = true
   }
   let movements = [
     <MovementComponent
-      key={notation.children_array[0].id}
-      movement={notation.children_array[0]}
+      key={children_array[0].id}
+      movement={children_array[0]}
       show_n_move={show_n_move}
       event={boardDispatch}
-      selected_move={cursor === notation.children_array[0] ? true : false}
+      selected_move={cursor === children_array[0]}
     />
   ]
-  if (notation.children_array.length > 1) {
+  if (has_variants) {
     movements.push('(')
-    for (let i = 1; i < notation.children_array.length; i++) {
+    for (let i = 1; i < children_array.length; i++) {
       movements.push(
         <MovementComponent
-          key={notation.children_array[i].id}
-          movement={notation.children_array[i]}
-          show_n_move={show_n_move}
+          key={children_array[i].id}
+          movement={children_array[i]}
+          show_n_move={true}
           event={boardDispatch}
-          selected_move={cursor === notation.children_array[i] ? true : false}
+          selected_move={cursor === children_array[i]}
         />
       )
-      movements.push(...prepareComponents(notation.children_array[i], boardDispatch, cursor))
+      movements.push(...prepareComponents(children_array[i], boardDispatch, cursor))
       movements.push(';')
     }
     movements.pop()
     movements.push(')')
   }
-  movements.push(...prepareComponents(notation.children_array[0], boardDispatch, cursor))
+  movements.push(...prepareComponents(children_array[0], boardDispatch, cursor, has_variants))
 
   return movements
 }
