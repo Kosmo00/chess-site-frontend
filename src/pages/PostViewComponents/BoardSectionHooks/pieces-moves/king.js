@@ -195,14 +195,14 @@ export const doCastle = (state, posX, posY) => {
   const rookQS = pieces_colocation[selected_piece[0]][0]
 
   if (getPiece(pieces_colocation, selected_piece).toUpperCase() === 'K') {
-    if (posX > selected_piece[1] + 1) {
+    if (posY > selected_piece[1] + 1) {
       state.pieces_colocation[posX][posY] = getPiece(state.pieces_colocation, state.selected_piece)
       state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
       pieces_colocation[selected_piece[0]][7] = ''
       pieces_colocation[selected_piece[0]][5] = rookKS
       return true
     }
-    if (posX < selected_piece[1] - 1) {
+    if (posY < selected_piece[1] - 1) {
       state.pieces_colocation[posX][posY] = getPiece(state.pieces_colocation, state.selected_piece)
       state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
       pieces_colocation[selected_piece[0]][0] = ''

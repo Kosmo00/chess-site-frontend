@@ -11,6 +11,7 @@ import { comprobateCheck, validateCastle, doCastle } from './pieces-moves/king'
 
 import { annotateMove } from './notation'
 import MoveNotation from './utils/MoveNotation'
+import { validateAPCapture, doAPCapture } from './pieces-moves/pawn';
 
 const tree_notation = new MoveNotation(
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -86,9 +87,9 @@ const changeCursor = (state, cursor) => {
   state.pieces_colocation = cursor.setBoardToArray()
   state.castle = cursor.castles
   state.n_move = cursor.n_move
+  state.ap_square = cursor.getAPCapture()
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
-
   return state
 }
 
@@ -155,9 +156,13 @@ const validatePieceSelected = (state, posX, posY) => {
  */
 const move = (state, posX, posY) => {
   if (state.legal_moves[posX][posY]) {
+
     specialMovesValues(state, posX, posY)
     let special_move
-    if (doCastle(state, posX, posY)) {
+    if (doAPCapture(state, posX, posY)) {
+
+    }
+    else if (doCastle(state, posX, posY)) {
       special_move = (posY === 6 ? 'KS' : 'QS')
     }
     else {
@@ -213,8 +218,9 @@ const manageTurn = state => {
 const specialMovesValues = (state, posX, posY) => {
   const piece_moved = getPiece(state.pieces_colocation, state.selected_piece)
   const color_piece = /[A-Z]/.test(piece_moved) ? 'w' : 'b'
+  state.ap_square = null
   removeCastle(state, piece_moved, color_piece)
-
+  state.ap_square = validateAPCapture(state, posX)
 }
 
 /**
