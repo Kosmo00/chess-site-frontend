@@ -1,22 +1,23 @@
-import { isSquareEmpty, prepareLegalMoves, buildEmptyArrayOfLegalMoves } from './utils'
+import { isSquareEmpty, prepareLegalMoves, buildEmptyArrayOfLegalMoves, getPiece } from './utils'
 import { comprobateCheckMate } from './pieces-moves/king'
 import MoveNotation from './utils/MoveNotation'
 
 export const annotateMove = (state, new_square, special_move) => {
   let move
-  switch(special_move){
-    case 'KS': 
-    move = '0-0' 
-    break
+  switch (special_move) {
+    case 'KS':
+      move = '0-0'
+      break
     case 'QS':
-    move = '0-0-0'
-    break
+      move = '0-0-0'
+      break
     default:
-    move = annotate(state, new_square)
+      move = annotate(state, new_square)
   }
   if (!state.cursor.children_set.has(move)) {
     state.cursor.children_set.add(move)
-    const new_move = new MoveNotation(generateFen(state), move, 'e2e4', state.cursor)
+    const new_move = new MoveNotation(generateFen(state), move,
+      createEasyCoordinates(state.selected_piece, new_square), state.cursor)
     state.cursor.children_array.push(new_move)
     state.cursor = new_move
   }
@@ -45,14 +46,16 @@ export const deleteVariant = (state, new_square) => {
  * @returns {string} position FEN notation
  */
 const generateFen = (state) => {
+  const { ap_square, turn, pieces_colocation, n_move } = state
+  const column = 'abcdefgh'
   let fen = []
 
-  fen.push(generateFenBoard(state.pieces_colocation))
-  fen.push(state.turn === 1 ? 'b' : 'w')
+  fen.push(generateFenBoard(pieces_colocation))
+  fen.push(turn === 1 ? 'b' : 'w')
   fen.push('KQkq')
-  fen.push('-')
+  fen.push(ap_square === null ? '-' : column[ap_square[1]] + (8 - ap_square[0]))
   fen.push('1')
-  fen.push(parseInt(state.n_move + (state.turn === -1 ? 1 : 0)))
+  fen.push(parseInt(n_move + (turn === -1 ? 1 : 0)))
 
   return fen.join(' ')
 }
@@ -153,9 +156,13 @@ const findVariant = (variants, move) => {
 const addCaptureNotation = (state, new_square) => {
   const { selected_piece, cursor, pieces_colocation } = state
   const previousBoard = cursor.setBoardToArray()
+  const ap = cursor.getAPCapture()
+
   const column = 'abcdefgh'
   let captureNotation = ''
-  if (previousBoard[new_square[0]][new_square[1]] !== '') {
+  if (previousBoard[new_square[0]][new_square[1]] !== '' ||
+    (getPiece(previousBoard, selected_piece).toUpperCase() === 'P' && ap !== null &&
+      ap[0] === new_square[0] && ap[1] === new_square[1])) {
     if (pieces_colocation[new_square[0]][new_square[1]].toUpperCase() === 'P') {
       captureNotation += column[selected_piece[1]]
     }
@@ -240,4 +247,22 @@ const changeColor = (state, square) => {
   else {
     pieces_colocation[square[0]][square[1]] = pieces_colocation[square[0]][square[1]].toUpperCase()
   }
+}
+
+/**
+ * @author Kosmo
+ * 
+ * @param {[number, number]} last_square 
+ * @param {[number, number]} new_square 
+ * 
+ * @returns {string}
+ */
+const createEasyCoordinates = (last_square, new_square) => {
+  const column = 'abcdefgh'
+  let easy_moves = ''
+
+  easy_moves += column[last_square[1]] + (8 - last_square[0])
+  easy_moves += column[new_square[1]] + (8 - new_square[0])
+
+  return easy_moves
 }

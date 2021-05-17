@@ -53,6 +53,15 @@ class MoveNotation {
   getTurnToAnnotate = () => {
     return this.turn === 'w' ? -1 : 1
   }
+
+  getAPCapture = () => {
+    let ap_square = null
+    const column = 'abcdefgh'
+    if (this.apCapture !== '-') {
+      return ap_square = [8 - parseInt(this.apCapture[1]), column.indexOf(this.apCapture[0])]
+    }
+    return ap_square
+  }
 }
 
 export default MoveNotation

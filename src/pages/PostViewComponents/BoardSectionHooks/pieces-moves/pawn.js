@@ -1,4 +1,4 @@
-import { isInBoard, getColorOfPiece } from '../utils'
+import { isInBoard, getColorOfPiece, getPiece } from '../utils'
 
 /**
  * @author {Kosmo}
@@ -10,7 +10,7 @@ import { isInBoard, getColorOfPiece } from '../utils'
  * @returns {Array} Array with legal moves
  */
 const pawnMoves = (state) => {
-  let { selected_piece, pieces_colocation, legal_moves } = state
+  let { selected_piece, pieces_colocation, legal_moves, ap_square } = state
   const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
   let direction = 1
   let initial_position = 1
@@ -20,13 +20,15 @@ const pawnMoves = (state) => {
   }
   if (isInBoard(selected_piece, 1 * direction, 1)) {
     const square_color_piece = getColorOfPiece(selected_piece, pieces_colocation, 1 * direction, 1)
-    if (square_color_piece !== color_piece && square_color_piece !== undefined) {
+    if ((square_color_piece !== color_piece && square_color_piece !== undefined) || (ap_square !== null &&
+      ((ap_square[0] === selected_piece[0] + 1 * direction && ap_square[1] === selected_piece[1] + 1)))) {
       legal_moves[selected_piece[0] + 1 * direction][selected_piece[1] + 1] = true
     }
   }
   if (isInBoard(selected_piece, 1 * direction, -1)) {
     const square_color_piece = getColorOfPiece(selected_piece, pieces_colocation, 1 * direction, -1)
-    if (square_color_piece !== color_piece && square_color_piece !== undefined) {
+    if ((square_color_piece !== color_piece && square_color_piece !== undefined) || (ap_square !== null &&
+      (ap_square[0] === selected_piece[0] + 1 * direction && ap_square[1] === selected_piece[1] - 1))) {
       legal_moves[selected_piece[0] + 1 * direction][selected_piece[1] - 1] = true
     }
   }
@@ -39,6 +41,33 @@ const pawnMoves = (state) => {
     }
   }
   return legal_moves
+}
+
+export const validateAPCapture = (state, posX) => {
+  const { turn, selected_piece, pieces_colocation } = state
+  const direction = (turn === 1 ? -1 : 1)
+  const file = (turn === 1 ? 6 : 1)
+  if (getPiece(pieces_colocation, selected_piece).toUpperCase() === 'P' && posX === file + 2 * direction) {
+    return [file + 1 * direction, selected_piece[1]]
+  }
+
+  return null
+}
+
+export const doAPCapture = (state, posX, posY) => {
+  const { selected_piece, pieces_colocation } = state
+  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+  const direction = color_piece === 'W' ? 1 : -1
+
+  if (selected_piece[1] !== posY) {
+    if (getPiece(pieces_colocation, [posX, posY]) === '') {
+      pieces_colocation[posX][posY] = pieces_colocation[selected_piece[0]][selected_piece[1]]
+      pieces_colocation[selected_piece[0]][selected_piece[1]] = ''
+      pieces_colocation[posX + 1 * direction][posY] = ''
+      return true
+    }
+  }
+  return false
 }
 
 export default pawnMoves
