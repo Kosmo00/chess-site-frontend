@@ -13,11 +13,10 @@ const MovementComponent = ({ movement, event, selected_move, show_n_move }) => {
     >
       {`
       ${(show_n_move ||
-          movement.getTurnToAnnotate() === 1) ? movement.n_move + '.' + (movement.getTurnToAnnotate() === -1 ? '..' : '') : ''}
-      `}
-      {movement.move}
+          movement.getTurnToAnnotate() === 1) ? movement.n_move + '.' +
+          (movement.getTurnToAnnotate() === -1 ? '..' : '') : ''}${movement.move}`}
     </span>
   )
 }
 
-export default React.memo(MovementComponent)
+export default MovementComponent

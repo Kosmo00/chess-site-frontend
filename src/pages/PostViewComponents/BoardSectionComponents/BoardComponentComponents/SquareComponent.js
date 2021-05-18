@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 // chess-site components
 import PieceComponent from './PieceComponent'
+import CoronationComponent from './CoronationComponent'
 
 // chess-site contexts
 import { BoardContext } from '../../BoardSection'
@@ -14,6 +15,9 @@ const SquareComponent = ({ color, posX, posY, width, is_checked, piece, is_selec
 
   const [background, setBackground] = useState(color)
 
+  const coronate = (piece) => {
+    boardDispatch({ type: 'coronate', value: { posX: posX, posY: posY, piece: piece } })
+  }
 
   useEffect(() => {
     if (is_legal && piece !== '') {
@@ -68,6 +72,8 @@ const SquareComponent = ({ color, posX, posY, width, is_checked, piece, is_selec
         piece
         && <PieceComponent square_piece={piece} width={width} posX={posX} posY={posY} />
       }
+      {piece === 's' && <CoronationComponent width={width} is_white_piece={/[A-Z]/.test(piece)} action={coronate} />}
+      {piece === 'S' && <CoronationComponent width={width} is_white_piece={/[A-Z]/.test(piece)} action={coronate} />}
     </div>
   )
 }

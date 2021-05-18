@@ -45,7 +45,7 @@ export const deleteVariant = (state, new_square) => {
  * 
  * @returns {string} position FEN notation
  */
-const generateFen = (state) => {
+export const generateFen = (state) => {
   const { ap_square, turn, pieces_colocation, n_move } = state
   const column = 'abcdefgh'
   let fen = []
@@ -55,7 +55,7 @@ const generateFen = (state) => {
   fen.push('KQkq')
   fen.push(ap_square === null ? '-' : column[ap_square[1]] + (8 - ap_square[0]))
   fen.push('1')
-  fen.push(parseInt(n_move + (turn === -1 ? 1 : 0)))
+  fen.push(parseInt(n_move))
 
   return fen.join(' ')
 }
@@ -105,9 +105,9 @@ const annotate = (state, new_square) => {
   const { pieces_colocation, check_square } = state
   const column = 'abcdefgh'
   let move_notation = ''
-
-  if (pieces_colocation[new_square[0]][new_square[1]].toUpperCase() !== 'P') {
-    move_notation += pieces_colocation[new_square[0]][new_square[1]].toUpperCase()
+  const piece = getPiece(pieces_colocation, new_square)
+  if (piece.toUpperCase() !== 'P' && piece.toUpperCase() !== 'S') {
+    move_notation += piece.toUpperCase()
     move_notation += addNecesaryLocation(state, new_square)
     move_notation += addCaptureNotation(state, new_square)
   }
@@ -160,10 +160,14 @@ const addCaptureNotation = (state, new_square) => {
 
   const column = 'abcdefgh'
   let captureNotation = ''
-  if (previousBoard[new_square[0]][new_square[1]] !== '' ||
+
+  if ((previousBoard[new_square[0]][new_square[1]] !== '' ||
     (getPiece(previousBoard, selected_piece).toUpperCase() === 'P' && ap !== null &&
-      ap[0] === new_square[0] && ap[1] === new_square[1])) {
-    if (pieces_colocation[new_square[0]][new_square[1]].toUpperCase() === 'P') {
+      ap[0] === new_square[0] && ap[1] === new_square[1])) || (
+      getPiece(previousBoard, selected_piece).toUpperCase() === 'S')) {
+
+    if ((getPiece(pieces_colocation, new_square).toUpperCase() === 'P') ||
+      (getPiece(pieces_colocation, new_square).toUpperCase() === 'S')) {
       captureNotation += column[selected_piece[1]]
     }
     captureNotation += 'x'
