@@ -55,10 +55,14 @@ export const validateAPCapture = (state, posX) => {
 }
 
 export const doAPCapture = (state, posX, posY) => {
-  const { selected_piece, pieces_colocation } = state
+  const { selected_piece, pieces_colocation, ap_square } = state
   const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
   const direction = color_piece === 'W' ? 1 : -1
+  const piece = getPiece(pieces_colocation, selected_piece)
 
+  if (piece.toUpperCase() !== 'P' || ap_square === null || ap_square[0] !== posX || ap_square[1] !== posY) {
+    return false
+  }
   if (selected_piece[1] !== posY) {
     if (getPiece(pieces_colocation, [posX, posY]) === '') {
       pieces_colocation[posX][posY] = pieces_colocation[selected_piece[0]][selected_piece[1]]
@@ -68,6 +72,18 @@ export const doAPCapture = (state, posX, posY) => {
     }
   }
   return false
+}
+
+export const coronate = (state) => {
+  const { pieces_colocation, selected_piece } = state
+  const piece = getPiece(pieces_colocation, selected_piece)
+  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+  const coronation_square = color_piece === 'W' ? 0 : 7
+  const direction = color_piece === 'W' ? -1 : 1
+
+  if (piece.toUpperCase() === 'P' && coronation_square === selected_piece[0] + 1 * direction) {
+    pieces_colocation[selected_piece[0]][selected_piece[1]] = color_piece === 'W' ? 'S' : 's'
+  }
 }
 
 export default pawnMoves

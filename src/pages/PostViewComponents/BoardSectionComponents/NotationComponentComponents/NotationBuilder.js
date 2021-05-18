@@ -9,7 +9,6 @@ import { BoardContext } from '../../BoardSection'
 const NotationBuilder = () => {
   const boardContext = useContext(BoardContext)
   const { boardState, boardDispatch } = boardContext
-
   return (
     <div className='d-flex flex-wrap'>
       {prepareComponents(boardState.notation, boardDispatch, boardState.cursor)}
@@ -17,7 +16,7 @@ const NotationBuilder = () => {
   )
 }
 
-const prepareComponents = (notation, boardDispatch, cursor, show_n_move = true) => {
+const prepareComponents = (notation, boardDispatch, cursor, show_n_move = false) => {
   const { children_array } = notation
   const has_variants = children_array.length > 1
   if (children_array !== undefined && children_array.length === 0) {
@@ -57,4 +56,4 @@ const prepareComponents = (notation, boardDispatch, cursor, show_n_move = true) 
 
 
 
-export default React.memo(NotationBuilder)
+export default NotationBuilder

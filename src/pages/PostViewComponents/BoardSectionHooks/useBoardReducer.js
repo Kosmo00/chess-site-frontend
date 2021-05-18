@@ -9,9 +9,9 @@ import {
 
 import { comprobateCheck, validateCastle, doCastle } from './pieces-moves/king'
 
-import { annotateMove } from './notation'
+import { annotateMove, generateFen } from './notation'
 import MoveNotation from './utils/MoveNotation'
-import { validateAPCapture, doAPCapture } from './pieces-moves/pawn';
+import { validateAPCapture, doAPCapture, coronate } from './pieces-moves/pawn';
 
 const tree_notation = new MoveNotation(
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -60,8 +60,11 @@ const boardReducer = (state, action) => {
       return { ...state, event: action.value }
     case 'change cursor':
       return { ...state, ...changeCursor(state, action.value) }
+    case 'coronate':
+      return { ...state, ...doCoronation(state, action.value.posX, action.value.posY, action.value.piece) }
+    case 'put a piece':
     default:
-      return
+      return state
   }
 }
 
@@ -71,6 +74,24 @@ const boardReducer = (state, action) => {
 const useBoardReducer = () => {
   const [boardState, boardDispatch] = useReducer(boardReducer, boardInitialState)
   return { boardState, boardDispatch }
+}
+
+
+const doCoronation = (state, posX, posY, piece) => {
+  let { pieces_colocation } = state
+  pieces_colocation[posX][posY] = piece
+  state.cursor.setFenData(generateFen({ ...state, turn: state.turn * -1, n_move: state.n_move - (state.turn === -1 ? 0 : 1) }))
+  state.cursor.parent.children_set.delete(state.cursor.move)
+  let new_move = state.cursor.move
+  new_move += `=${piece.toUpperCase()}`
+  state.cursor.move = new_move
+  if (state.cursor.parent.children_set.has(new_move)) {
+    state = changeCursor({ ...state }, state.cursor.parent.findChildrenByMove(new_move))
+    state.cursor.parent.children_array.pop()
+  }
+  else {
+    state.cursor.parent.children_set.add(new_move)
+  }
 }
 
 /**
@@ -85,7 +106,7 @@ const changeCursor = (state, cursor) => {
   state.cursor = cursor
   state.turn = cursor.getTurn()
   state.pieces_colocation = cursor.setBoardToArray()
-  state.castle = cursor.castles
+  state.castle = cursor.castles.split()
   state.n_move = cursor.n_move
   state.ap_square = cursor.getAPCapture()
   state.selected_piece = null
@@ -156,12 +177,11 @@ const validatePieceSelected = (state, posX, posY) => {
  */
 const move = (state, posX, posY) => {
   if (state.legal_moves[posX][posY]) {
-
+    coronate(state)
+    const is_AP_capture_realized = doAPCapture(state, posX, posY)
     specialMovesValues(state, posX, posY)
     let special_move
-    if (doAPCapture(state, posX, posY)) {
-
-    }
+    if (is_AP_capture_realized) { }
     else if (doCastle(state, posX, posY)) {
       special_move = (posY === 6 ? 'KS' : 'QS')
     }
