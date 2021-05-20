@@ -9,7 +9,7 @@ import {
 
 import { comprobateCheck, validateCastle, doCastle } from './pieces-moves/king'
 
-import { annotateMove, generateFen } from './notation'
+import { annotateMove } from './notation'
 import MoveNotation from './utils/MoveNotation'
 import { validateAPCapture, doAPCapture, coronate } from './pieces-moves/pawn';
 
@@ -80,7 +80,7 @@ const useBoardReducer = () => {
 const doCoronation = (state, posX, posY, piece) => {
   let { pieces_colocation } = state
   pieces_colocation[posX][posY] = piece
-  state.cursor.setFenData(generateFen({ ...state, turn: state.turn * -1, n_move: state.n_move - (state.turn === -1 ? 0 : 1) }))
+  state.cursor.setFenBoard(state.pieces_colocation)
   state.cursor.parent.children_set.delete(state.cursor.move)
   let new_move = state.cursor.move
   new_move += `=${piece.toUpperCase()}`
@@ -107,7 +107,7 @@ const changeCursor = (state, cursor) => {
   state.turn = cursor.getTurn()
   state.pieces_colocation = cursor.setBoardToArray()
   state.castle = cursor.castles.split()
-  state.n_move = cursor.n_move
+  state.n_move = cursor.getNumMoveToAnnote()
   state.ap_square = cursor.getAPCapture()
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
@@ -190,8 +190,8 @@ const move = (state, posX, posY) => {
       state.pieces_colocation[state.selected_piece[0]][state.selected_piece[1]] = ''
       state.check_square = comprobateCheck(state)
     }
-    annotateMove(state, [posX, posY], special_move)
     manageTurn(state)
+    annotateMove(state, [posX, posY], special_move)
   }
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()

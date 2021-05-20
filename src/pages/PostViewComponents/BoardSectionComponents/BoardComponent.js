@@ -6,18 +6,18 @@ import RenderSquare from './BoardComponentComponents/RenderSquare'
 
 const BoardComponent = ({ width, boardState }) => {
   const { legal_moves, pieces_colocation, selected_piece, check_square } = boardState
-  const maxWidth = window.innerHeight - 25
   const square = []
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
-      square.push(RenderSquare(i, j, Math.min(width, maxWidth), check_square,
+      square.push(RenderSquare(i, j, width, check_square,
         legal_moves[i][j], pieces_colocation[i][j], selected_piece))
     }
   }
   return (
     <div style={{
       display: 'flex',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      width: width
     }}>
       {square}
     </div>

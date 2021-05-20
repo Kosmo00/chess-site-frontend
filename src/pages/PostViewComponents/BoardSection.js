@@ -43,7 +43,7 @@ const BoardSection = () => {
   const setVariantInState = (selected_variant) => {
     boardDispatch({ type: 'change cursor', value: selected_variant })
   }
-
+  console.log(window)
   return (
     <Row>
       <BoardContext.Provider value={{ boardState: boardState, boardDispatch: boardDispatch }}>
@@ -55,7 +55,7 @@ const BoardSection = () => {
           />}
         <Col xs={7}>
           {resizeListener}
-          <BoardComponent width={sizes.width} boardState={boardState} />
+          <BoardComponent width={Math.min(sizes.width, sizes.height)} boardState={boardState} />
         </Col>
         <Col xs={5}>
           <NotationComponent height={sizes.width - 32 - sizes.width % 8} />

@@ -13,7 +13,7 @@ const NotationComponent = ({ height }) => {
       <Card.Header>
         Datos del juego
       </Card.Header>
-      <Card.Body>
+      <Card.Body style={{ overflowY: 'scroll' }}>
         <NotationBuilder />
       </Card.Body>
     </Card>
