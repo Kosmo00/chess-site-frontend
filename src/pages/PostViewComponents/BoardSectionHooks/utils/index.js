@@ -98,12 +98,17 @@ const exploreAllPosibleMoves = (state, king_position) => {
  * @returns {string || undefined}
  */
 export const getColorOfPiece = (piece, board, plusXAxis = 0, plusYAxis = 0) => {
-  if (/[A-Z]/.test(board[piece[0] + plusXAxis][piece[1] + plusYAxis])) {
-    return 'W'
+  const posX = piece[0] + plusXAxis
+  const posY = piece[1] + plusYAxis
+  if (posX < 8 && posY < 8 && posX>=0 && posY >= 0) {
+    if (/[A-Z]/.test(board[posX][posY])) {
+      return 'W'
+    }
+    else if (/[a-z]/.test(board[piece[0] + plusXAxis][piece[1] + plusYAxis])) {
+      return 'B'
+    }
   }
-  else if (/[a-z]/.test(board[piece[0] + plusXAxis][piece[1] + plusYAxis])) {
-    return 'B'
-  }
+
 }
 
 /**
