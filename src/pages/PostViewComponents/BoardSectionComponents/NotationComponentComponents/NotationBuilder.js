@@ -10,7 +10,7 @@ const NotationBuilder = () => {
   const boardContext = useContext(BoardContext)
   const { boardState, boardDispatch } = boardContext
   return (
-    <div className='d-flex flex-wrap'>
+    <div className='d-flex flex-wrap mb-2'>
       {prepareComponents(boardState.notation, boardDispatch, boardState.cursor)}
     </div>
   )
@@ -56,4 +56,4 @@ const prepareComponents = (notation, boardDispatch, cursor, show_n_move = false)
 
 
 
-export default NotationBuilder
+export default React.memo(NotationBuilder)

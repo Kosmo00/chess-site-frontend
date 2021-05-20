@@ -1,5 +1,6 @@
 import { v4 } from 'uuid'
 import { createEmptyBoard } from './index'
+import { generateFenBoard } from '../notation';
 
 class MoveNotation {
   constructor(fen, move, easy_coordinates, parent) {
@@ -75,6 +76,29 @@ class MoveNotation {
       }
       return null
     }
+  }
+
+
+  setFenBoard = board => {
+    this.board = generateFenBoard(board)
+    this.updateFen()
+  }
+
+  updateFen = () => {
+    let fen_data = []
+    fen_data[0] = this.board
+    fen_data[1] = this.turn
+    fen_data[2] = this.castles
+    fen_data[3] = this.apCapture
+    fen_data[4] = 1
+    fen_data[5] = this.n_move
+    this.fen = fen_data.join(' ')
+  }
+
+  getNumMoveToAnnote = () => {
+    if (this.parent === null)
+      return this.n_move
+    return this.parent.n_move
   }
 }
 

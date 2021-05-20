@@ -13,7 +13,7 @@ const MovementComponent = ({ movement, event, selected_move, show_n_move }) => {
     >
       {`
       ${(show_n_move ||
-          movement.getTurnToAnnotate() === 1) ? movement.n_move + '.' +
+          movement.getTurnToAnnotate() === 1) ? movement.getNumMoveToAnnote() + '.' +
           (movement.getTurnToAnnotate() === -1 ? '..' : '') : ''}${movement.move}`}
     </span>
   )

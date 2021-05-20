@@ -45,18 +45,16 @@ export const deleteVariant = (state, new_square) => {
  * 
  * @returns {string} position FEN notation
  */
-export const generateFen = (state) => {
+const generateFen = (state) => {
   const { ap_square, turn, pieces_colocation, n_move } = state
   const column = 'abcdefgh'
   let fen = []
-
   fen.push(generateFenBoard(pieces_colocation))
-  fen.push(turn === 1 ? 'b' : 'w')
+  fen.push(turn === 1 ? 'w' : 'b')
   fen.push('KQkq')
   fen.push(ap_square === null ? '-' : column[ap_square[1]] + (8 - ap_square[0]))
   fen.push('1')
-  fen.push(parseInt(n_move))
-
+  fen.push(n_move)
   return fen.join(' ')
 }
 
@@ -67,7 +65,7 @@ export const generateFen = (state) => {
  * 
  * @returns {string} FEN board generated
  */
-const generateFenBoard = board => {
+export const generateFenBoard = board => {
   let fen_board = ''
   for (let i = 0; i < 8; i++) {
     let count_free_squares = 0;
