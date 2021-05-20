@@ -109,6 +109,7 @@ const changeCursor = (state, cursor) => {
   state.castle = cursor.castles.split()
   state.n_move = cursor.getNumMoveToAnnote()
   state.ap_square = cursor.getAPCapture()
+  state.check_square = comprobateCheck(state)
   state.selected_piece = null
   state.legal_moves = buildEmptyArrayOfLegalMoves()
   return state

@@ -100,7 +100,7 @@ const exploreAllPosibleMoves = (state, king_position) => {
 export const getColorOfPiece = (piece, board, plusXAxis = 0, plusYAxis = 0) => {
   const posX = piece[0] + plusXAxis
   const posY = piece[1] + plusYAxis
-  if (posX < 8 && posY < 8 && posX>=0 && posY >= 0) {
+  if (posX < 8 && posY < 8 && posX >= 0 && posY >= 0) {
     if (/[A-Z]/.test(board[posX][posY])) {
       return 'W'
     }
@@ -166,8 +166,8 @@ export const buildEmptyArrayOfLegalMoves = () => {
  * @returns {Array<Array<boolean>>} array of booleans with the legal movements of all pieces of an color
  */
 export const getAllColorLegalMoves = (state) => {
-  const { selected_piece, pieces_colocation } = state
-  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+  const { pieces_colocation } = state
+  const color_piece = state.turn === 1 ? 'w' : 'b'
   let legal_moves = buildEmptyArrayOfLegalMoves()
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {

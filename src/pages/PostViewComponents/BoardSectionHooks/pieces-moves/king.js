@@ -38,8 +38,8 @@ const kingMoves = (state) => {
  * @returns {Array | null}
  */
 export const comprobateCheck = (state) => {
-  const { selected_piece, pieces_colocation } = state
-  const color_piece = getColorOfPiece(selected_piece, pieces_colocation)
+  const { pieces_colocation } = state
+  const color_piece = state.turn === 1 ? 'w' : 'b'
 
   let legal_moves = getAllColorLegalMoves(state)
 
