@@ -8,6 +8,7 @@ import NotFound from './pages/NotFound'
 import AllPostView from './pages/AllPostView'
 import LoginView from './pages/LoginView'
 import RegisterView from './pages/RegisterView'
+import UserProfile from './pages/UserProfile'
 
 // chess-site components
 import SiteNavbar from './pages/_components/SiteNavbar'
@@ -41,6 +42,8 @@ const App = () => {
         <SiteNavbar />
         <Switch>
           <Route exact path='/post/:username/:post_title' component={PostView} />
+          <Route exact path='/user/:username' component={UserProfile} />
+          <Route exact path='/profile' component={UserProfile} />
           <Route exact path='/' component={RedirectToPost} />
           <Route exact path='/posts' component={AllPostView} />
           <Route exact path='/login' component={LoginView} />
@@ -60,7 +63,6 @@ const RedirectToPost = () => {
 const Logout = () => {
   const userContext = useContext(LoginContext)
   const { userState, userDispatch } = userContext
-
   useEffect(() => {
     if (userState.token) {
       axios.post(logout(), userState, {
@@ -68,9 +70,6 @@ const Logout = () => {
           'x-token': userState.token
         }
       })
-        .then(res => {
-          console.log(res)
-        })
         .catch(err => {
           console.log(err)
         })

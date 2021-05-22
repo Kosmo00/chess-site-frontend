@@ -10,7 +10,6 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import { LoginContext } from '../../App'
 
 const SiteNavbar = () => {
-
   const userContext = useContext(LoginContext)
 
   const { userState } = userContext
@@ -34,7 +33,13 @@ const SiteNavbar = () => {
         <Nav>
           {!userState.token && <Link to='/login' className='text-decoration-none'><Nav.Link as='span'>Login</Nav.Link></Link>}
           {!userState.token && <Link to='/register' className='text-decoration-none'><Nav.Link as='span'>Register</Nav.Link></Link>}
-          {userState.token && <Link to='/logout' className='text-decoration-none'><Nav.Link as='span'>Logout</Nav.Link></Link>}
+          {userState.token &&
+            <NavDropdown alignRight title="User" id='collasible-nav-user-dropdown'>
+              <Link to='/profile' className='text-decoration-none dropdown-item'>Profile</Link>
+              <NavDropdown.Divider />
+              <Link to='/logout' className='text-decoration-none dropdown-item'>Logout</Link>
+            </NavDropdown>
+          }
         </Nav>
       </Navbar.Collapse>
     </Navbar>
