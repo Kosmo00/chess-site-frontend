@@ -19,3 +19,7 @@ export const postRegister = () => {
 export const logout = () => {
     return `${prefix}/api/logout`
 }
+
+export const getUserData = username => {
+    return `${prefix}/api/user/${username}`
+}

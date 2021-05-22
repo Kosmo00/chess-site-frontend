@@ -9,11 +9,11 @@ import NotationBuilder from './NotationComponentComponents/NotationBuilder'
 
 const NotationComponent = ({ height }) => {
   return (
-    <Card style={{ height: height }}>
+    <Card className='ml-3' style={{ height: height }}>
       <Card.Header>
         Datos del juego
       </Card.Header>
-      <Card.Body style={{ overflowY: 'scroll' }}>
+      <Card.Body className='overflow-auto'>
         <NotationBuilder />
       </Card.Body>
     </Card>

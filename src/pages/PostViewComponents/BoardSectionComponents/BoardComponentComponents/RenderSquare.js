@@ -8,7 +8,7 @@ const RenderSquare = (posX, posY, width, check_square, is_legal, piece, piece_se
   const is_checked = check_square !== null ? (check_square[0] === posX && check_square[1] === posY ? true : false) : false
   const is_selected = piece_selected !== null ? (piece_selected[0] === posX && piece_selected[1] === posY ? true : false) : false
   const color = (posX + posY) % 2 ? 'sandybrown' : 'antiquewhite'
-  width -= width % 8 + 32
+  width -= width % 8
 
   return <SquareComponent
     key={posX * 8 + posY}

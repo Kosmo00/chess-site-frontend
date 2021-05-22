@@ -22,11 +22,14 @@ const BoardSection = () => {
   const [variantsView, setVariantsView] = useState(false)
 
   useEffect(() => {
+    const isPosibleNextMove = () => {
+      return boardState.cursor.children_array !== undefined && boardState.cursor.children_array.length > 0
+    }
     window.onkeydown = ev => {
       if (ev.code === 'ArrowLeft' && boardState.cursor.parent !== null) {
         boardDispatch({ type: 'change cursor', value: boardState.cursor.parent })
       }
-      if (ev.code === 'ArrowRight' && boardState.cursor.children_array !== undefined && boardState.cursor.children_array.length > 0) {
+      if (ev.code === 'ArrowRight' && isPosibleNextMove()) {
         if (boardState.cursor.children_array.length === 1) {
           boardDispatch({ type: 'change cursor', value: boardState.cursor.children_array[0] })
         }
@@ -35,8 +38,18 @@ const BoardSection = () => {
         }
       }
     }
+    window.onwheel = ev => {
+      ev.preventDefault()
+      if (ev.deltaY < 0 && boardState.cursor.parent !== null){
+        boardDispatch({ type: 'change cursor', value: boardState.cursor.parent })
+      }
+      if (ev.deltaY > 0 && isPosibleNextMove()){
+        boardDispatch({ type: 'change cursor', value: boardState.cursor.children_array[0] })
+      }
+    }
     return () => {
       window.onkeydown = null
+      window.onwheel = null
     }
   }, [boardState, boardDispatch])
 
@@ -52,12 +65,18 @@ const BoardSection = () => {
             returnVariant={setVariantInState}
             variants={boardState.cursor.children_array}
           />}
-        <Col xs={7}>
+        <Col
+          xs={7}
+          style={{
+            height: Math.min(window.innerHeight - window.innerHeight / 6, sizes.width),
+            marginRight: - (sizes.width - sizes.height)
+          }}
+        >
           {resizeListener}
-          <BoardComponent width={sizes.width} boardState={boardState} />
+          <BoardComponent width={Math.min(sizes.width, sizes.height)} boardState={boardState} />
         </Col>
         <Col xs={5}>
-          <NotationComponent height={sizes.width - 32 - sizes.width % 8} />
+          <NotationComponent height={Math.min(sizes.width, sizes.height)} />
         </Col>
       </BoardContext.Provider>
     </Row>
